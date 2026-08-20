@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('email_verified_at')->nullable(); // NULL許可
             $table->string('password');
+            $table->text('two_factor_secret')->nullable();       // 基本機能版用のカラム（追加）
+            $table->text('two_factor_recovery_codes')->nullable(); // 基本機能版用のカラム（追加）
+            $table->timestamp('two_factor_confirmed_at')->nullable(); // 基本機能版用のカラム（追加）
             $table->rememberToken();
             $table->timestamps();
         });
