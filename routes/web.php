@@ -11,10 +11,6 @@ use App\Http\Controllers\GenreController;
 Route::get('/', [BookController::class, 'index'])->name('books.index');
 Route::get('/books', [BookController::class, 'index'])->name('books.index');
 
-// PG02 書籍詳細 ＆ レビュー投稿
-Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
-Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-
 // PG03 書籍登録
 Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
 Route::post('/books', [BookController::class, 'store'])->name('books.store');
@@ -24,6 +20,25 @@ Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.e
 Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
 Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
 
+// PG02 書籍詳細 ＆ レビュー投稿
+// 書籍詳細表示
+Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+
+// お気に入り切り替え
+Route::post('/books/{book}/favorite', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+
+// レビュー投稿
+Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+// レビュー関連（いいね）
+Route::post('/reviews/{review}/like', [ReviewController::class, 'like'])->name('reviews.like');
+
+// レビュー関連（編集）
+Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+
+// レビュー関連（削除）
+Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
 // PG05 ジャンル一覧
 Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
 
@@ -32,6 +47,9 @@ Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.
 
 // PG11 ランキング
 Route::get('/ranking', [RankingController::class, 'index'])->name('ranking.index');
+
+
+
 
 // 以下は仮のコード。後で修正必須
 // 認証系ルートのプレースホルダー（エラー回避用）
