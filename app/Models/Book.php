@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Genre;
 
 class Book extends Model
 {
@@ -15,7 +16,7 @@ class Book extends Model
         'title',
         'author',
         'isbn',
-        'published_at',
+        'published_date',
         'description',
         'image_url',
     ];
@@ -41,6 +42,7 @@ class Book extends Model
     // リレーション: 書籍のジャンル（多対多）
     public function genres()
     {
-        return $this->belongsToMany(Genre::class, 'book_genre');
+        return $this->belongsToMany(Genre::class, 'book_genre')
+            ->withTimestamps();
     }
 }

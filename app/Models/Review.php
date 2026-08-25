@@ -33,4 +33,10 @@ class Review extends Model
     {
         return $this->hasMany(ReviewLike::class);
     }
+
+    // リレーション: このレビューに「いいね」したユーザー一覧
+    public function likedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'review_likes', 'review_id', 'user_id');
+    }
 }
