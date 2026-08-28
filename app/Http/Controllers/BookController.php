@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Genre;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -47,13 +48,12 @@ class BookController extends Controller
     // 書籍を登録する
     public function store(StoreBookRequest $request)
     {
-        //  後で修正　ここから
-        // バリデーション済みのデータに、一時的に user_id (例: 1) を追加する
         $data = $request->validated();
-        $data['user_id'] = 1; // データベースに存在するユーザーIDを指定
-        // 後で修正　ここまで
 
-        $genreIds = $data['genres'];
+        // ログイン中のユーザーIDを動的に設定する
+        $data['user_id'] = Auth::id();
+
+        $genreIds = $data['genres'] ?? []; // ジャンルが未選択の場合の安全対策
         unset($data['genres']); // booksテーブルに存在しないカラムなので削除
 
         // 書籍テーブルに登録
