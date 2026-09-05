@@ -3,12 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Book;
 
 class FavoriteController extends Controller
 {
-    public function index()
+    // お気に入り一覧表示
+    public function index(Request $request)
     {
-        // お気に入り一覧画面仮作成（後ほど修正）
-        return view('favorites.index');
+        // ログインユーザーのお気に入り書籍を取得（ページネーション対応）
+        $books = $request->user()->favoriteBooks()->paginate(10);
+
+        return view('favorites.index', compact('books'));
+    }
+
+    // お気に入りの登録・解除を切り替える（トグル）
+    public function toggle(Request $request, Book $book)
+    {
+        $user = $request->user();
+
+        // ログインユーザーのお気に入りリストに対して toggle を実行
+        $user->favoriteBooks()->toggle($book);
+
+        return back()->with('success', 'お気に入りを更新しました。');
     }
 }
