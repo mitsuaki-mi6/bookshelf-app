@@ -43,6 +43,9 @@ Route::middleware('auth')->group(
         // レビュー投稿
         Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
+        // PG09	レビュー編集
+        Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+
         // レビュー関連（いいね）
         Route::post('/reviews/{review}/like', [ReviewController::class, 'like'])->name('reviews.like');
 
