@@ -33,7 +33,16 @@ class BookController extends Controller
     // 書籍を削除する
     public function destroy(Book $book)
     {
-        $book->delete();
+        $book->genres()->detach(); // 中間テーブルの削除
+        $book->favorites()->delete(); // お気に入りの削除
+
+        // レビューとそのいいねを削除する場合
+        foreach ($book->reviews as $review) {
+            $review->reviewLikes()->delete(); // いいねの削除
+        }
+        $book->reviews()->delete(); // レビューの削除
+
+        $book->delete();  // 書籍を論理削除
 
         return redirect()->route('books.index')->with('success', '書籍を削除しました。');
     }

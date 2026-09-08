@@ -58,7 +58,8 @@ class User extends Authenticatable
     // リレーション: ユーザーがいいねしたレビュー
     public function likedReviews()
     {
-        return $this->belongsToMany(Review::class, 'review_likes', 'user_id', 'review_id');
+        return $this->belongsToMany(Review::class, 'review_likes', 'user_id', 'review_id')
+            ->withTimestamps();
     }
 
     // リレーション: ユーザーがお気に入り登録した書籍
