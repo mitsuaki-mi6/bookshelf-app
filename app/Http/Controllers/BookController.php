@@ -33,6 +33,11 @@ class BookController extends Controller
     // 書籍を削除する
     public function destroy(Book $book)
     {
+        // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
+        if ($book->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $book->genres()->detach(); // 中間テーブルの削除
         $book->favorites()->delete(); // お気に入りの削除
 
@@ -77,6 +82,11 @@ class BookController extends Controller
     // 書籍編集画面を表示する
     public function edit(Book $book)
     {
+        // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
+        if ($book->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $genres = Genre::all();
         $book->load('genres');
 
@@ -86,6 +96,11 @@ class BookController extends Controller
     // 書籍を更新する
     public function update(UpdateBookRequest $request, Book $book)
     {
+        // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
+        if ($book->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         // バリデーション済みのデータを取得し、書籍情報を更新
         $book->update($request->validated());
 

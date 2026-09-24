@@ -25,12 +25,21 @@ class ReviewController extends Controller
     // レビュー編集画面を表示する
     public function edit(Book $book, Review $review)
     {
+        // レビューの所有者がログイン中のユーザーでなければ403エラー
+        if ($review->user_id !== auth()->id()) {
+            abort(403);
+        }
         return view('reviews.edit', compact('book', 'review'));
     }
 
     // レビューを更新する
     public function update(ReviewRequest $request, Book $book, Review $review)
     {
+        // レビューの所有者がログイン中のユーザーでなければ403エラー
+        if ($review->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $review->update($request->validated());
         return redirect()->route('books.show', $review->book)->with('success', 'レビューを更新しました。');
     }
@@ -38,6 +47,11 @@ class ReviewController extends Controller
     // レビューを削除する
     public function destroy(Review $review)
     {
+        // レビューの所有者がログイン中のユーザーでなければ403エラー
+        if ($review->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         // 削除する前に紐づく書籍を変数に保持しておく
         $book = $review->book;
 
