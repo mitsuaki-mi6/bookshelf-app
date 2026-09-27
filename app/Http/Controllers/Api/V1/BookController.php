@@ -50,10 +50,17 @@ class BookController extends Controller
     }
 
     // 書籍詳細を取得する(GET /api/v1/books/{book})
-    public function show(Book $book)
+    public function show($id)
     {
-        // 詳細画面で必要なリレーションを事前ロード
-        $book->load(['genres', 'reviews.user']);
+        // 書籍詳細で必要なリレーションを事前ロード
+        $book = Book::with(['genres', 'reviews.user'])->find($id);
+
+        //書籍が存在しない場合
+        if (!$book) {
+            return response()->json([
+                'message' => '指定された書籍が見つかりませんでした'
+            ], 404);
+        }
 
         // APIリソースを使って単体データを整形して返却(1件)
         return new BookResource($book);
@@ -79,8 +86,16 @@ class BookController extends Controller
     }
 
     // 書籍を更新する(PUT /api/v1/books/{book})
-    public function update(UpdateBookRequest $request, Book $book)
+    public function update(UpdateBookRequest $request, $id)
     {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json([
+                'message' => '指定された書籍が見つかりませんでした'
+            ], 404);
+        }
+
         // バリデーション済みのデータを変数に受ける
         $data = $request->validated();
 
@@ -99,8 +114,16 @@ class BookController extends Controller
     }
 
     // 書籍を削除する (DELETE /api/v1/books/{book})
-    public function destroy(Book $book)
+    public function destroy($id)
     {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json([
+                'message' => '指定された書籍が見つかりませんでした'
+            ], 404);
+        }
+
         // 書籍を削除（関連データはデータベースの外部キー制約・カスケードで自動削除）
         $book->delete();
 
