@@ -45,7 +45,15 @@ class BookController extends Controller
         $perPage = $request->input('per_page', 10);
         $books = $query->paginate($perPage);
 
-        // APIリソースを使って整形して返却(リスト)
+        // データが0件のときはメッセージを返す
+        if ($books->isEmpty()) {
+            return response()->json([
+                'data' => [],
+                'message' => '該当する書籍が見つかりませんでした。',
+            ]);
+        }
+
+        // 通常時はいつものリソースをそのまま返す
         return BookResource::collection($books);
     }
 
