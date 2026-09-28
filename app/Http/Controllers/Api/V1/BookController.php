@@ -53,14 +53,7 @@ class BookController extends Controller
     public function show($id)
     {
         // 書籍詳細で必要なリレーションを事前ロード
-        $book = Book::with(['genres', 'reviews.user'])->find($id);
-
-        //書籍が存在しない場合
-        if (!$book) {
-            return response()->json([
-                'message' => '指定された書籍が見つかりませんでした'
-            ], 404);
-        }
+        $book = Book::with(['genres', 'reviews.user'])->findOrFail($id);
 
         // APIリソースを使って単体データを整形して返却(1件)
         return new BookResource($book);
@@ -82,19 +75,16 @@ class BookController extends Controller
         $book->genres()->sync($genreIds);
 
         // ジャンルをロードし、ステータスコード 201でレスポンスを返却
-        return (new BookResource($book->load('genres')))->response()->setStatusCode(201);
+        return response()->json([
+            'message' => '書籍が正常に登録されました。',
+            'data' => new BookResource($book->load('genres')),
+        ], 201);
     }
 
     // 書籍を更新する(PUT /api/v1/books/{book})
     public function update(UpdateBookRequest $request, $id)
     {
-        $book = Book::find($id);
-
-        if (!$book) {
-            return response()->json([
-                'message' => '指定された書籍が見つかりませんでした'
-            ], 404);
-        }
+        $book = Book::findOrFail($id);
 
         // バリデーション済みのデータを変数に受ける
         $data = $request->validated();
@@ -116,18 +106,26 @@ class BookController extends Controller
     // 書籍を削除する (DELETE /api/v1/books/{book})
     public function destroy($id)
     {
-        $book = Book::find($id);
+        $book = Book::findOrFail($id);
 
-        if (!$book) {
-            return response()->json([
-                'message' => '指定された書籍が見つかりませんでした'
-            ], 404);
+        // 中間テーブル（book_genre）の削除
+        $book->genres()->detach();
+
+        // お気に入り（favorites）の削除
+        $book->favorites()->delete();
+
+        // レビューに紐づくいいね（review_likes）を削除してからレビューを削除
+        foreach ($book->reviews as $review) {
+            $review->reviewLikes()->delete();
         }
+        $book->reviews()->delete();
 
-        // 書籍を削除（関連データはデータベースの外部キー制約・カスケードで自動削除）
+        // 書籍本体を削除
         $book->delete();
 
-        // 削除成功時はレスポンスボディなしの 204 No Content を返却
-        return response()->noContent();
+        // 削除成功時にメッセージをJSONで返却（ステータスコード200）
+        return response()->json([
+            'message' => '書籍が正常に削除されました。',
+        ], 200);
     }
 }
