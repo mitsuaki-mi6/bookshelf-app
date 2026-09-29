@@ -145,7 +145,7 @@ class BookIndexApiTest extends TestCase
 
         // レスポンス情報を確認
         $response
-            // ページネーションを確認
+            // レビュー情報を確認
             ->assertJsonFragment(['average_rating' => 3])
             ->assertJsonFragment(['reviews_count' => 2])
             ->assertJsonFragment(['comment' => 'テストコメント']);
