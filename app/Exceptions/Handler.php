@@ -4,6 +4,9 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -23,8 +26,32 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        // モデルが見つからない、または404エラーの場合
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => '指定された書籍が見つかりませんでした。'
+                ], 404);
+            }
+        });
+
+        // または ModelNotFoundException の場合も念のため
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => '指定された書籍が見つかりませんでした。'
+                ], 404);
+            }
+        });
+
+        // APIのリクエストでバリデーションエラーが発生した場合（422）
+        $this->renderable(function (ValidationException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => '入力内容に誤りがあります。',
+                    'errors' => $e->errors(),
+                ], 422);
+            }
         });
     }
 }
