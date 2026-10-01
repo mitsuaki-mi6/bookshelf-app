@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Genre;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class GenreManagementTest extends TestCase
 {
@@ -66,7 +65,7 @@ class GenreManagementTest extends TestCase
         $user = User::factory()->create();
 
         // Act　必須の情報は与えておく
-        $response = $this->actingAs($user)->put("/genres/999", [
+        $response = $this->actingAs($user)->put('/genres/999', [
             'name' => '存在しないジャンルの更新',
         ]);
         // Assert
@@ -108,7 +107,7 @@ class GenreManagementTest extends TestCase
         ]);
 
         // Act
-        $response = $this->actingAs($user)->delete("/genres/999");
+        $response = $this->actingAs($user)->delete('/genres/999');
 
         // Assert
         $response->assertStatus(404);
@@ -118,7 +117,7 @@ class GenreManagementTest extends TestCase
     public function 未認証ユーザーでジャンル登録しようとした場合ログイン画面にリダイレクト()
     {
         // Act: 未認証ユーザーでジャンル登録にアクセス
-        $response = $this->post("/genres", [
+        $response = $this->post('/genres', [
             'name' => '新規ジャンル',
         ]);
 
@@ -130,7 +129,7 @@ class GenreManagementTest extends TestCase
     public function 未認証ユーザーでジャンル更新しようとした場合ログイン画面にリダイレクト()
     {
         // Act: 未認証ユーザーでジャンル更新にアクセス
-        $response = $this->put("/genres/1", [
+        $response = $this->put('/genres/1', [
             'name' => '更新ジャンル',
         ]);
 
@@ -142,7 +141,7 @@ class GenreManagementTest extends TestCase
     public function 未認証ユーザーでジャンル削除しようとした場合ログイン画面にリダイレクト()
     {
         // Act: 未認証ユーザーでジャンル削除にアクセス
-        $response = $this->delete("/genres/1");
+        $response = $this->delete('/genres/1');
 
         // Assert: ログイン画面へのリダイレクト確認
         $response->assertRedirect(route('login'));

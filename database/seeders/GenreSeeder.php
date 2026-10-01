@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Genre;
+use Illuminate\Database\Seeder;
 
 class GenreSeeder extends Seeder
 {
@@ -22,7 +22,7 @@ class GenreSeeder extends Seeder
             '科学',
             '芸術',
             '料理',
-            '旅行'
+            '旅行',
         ];
 
         foreach ($genres as $genreName) {

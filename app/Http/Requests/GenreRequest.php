@@ -21,6 +21,7 @@ class GenreRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', 'unique:genres,name'],
         ];
     }
+
     // バリデーションメッセージ
     public function messages(): array
     {

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Book;
 use App\Models\Review;
 use App\Models\User;
-use App\Models\Book;
+use Illuminate\Database\Seeder;
 
 class ReviewSeeder extends Seeder
 {
@@ -33,7 +33,9 @@ class ReviewSeeder extends Seeder
             $selectedUsers = $users->random(min($reviewerCount, $users->count()));
 
             foreach ($selectedUsers as $user) {
-                if ($count >= 32) break 2;
+                if ($count >= 32) {
+                    break 2;
+                }
 
                 Review::create([
                     'user_id' => $user->id,

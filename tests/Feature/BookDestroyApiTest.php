@@ -2,22 +2,21 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
+use App\Models\Favorite;
 use App\Models\Genre;
 use App\Models\Review;
-use App\Models\Favorite;
 use App\Models\ReviewLike;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookDestroyApiTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function 指定IDの書籍と関連テーブルを削除する()
+    public function 指定_i_dの書籍と関連テーブルを削除する()
     {
         // Arrange
         // ユーザーを作成
@@ -84,7 +83,7 @@ class BookDestroyApiTest extends TestCase
     }
 
     /** @test */
-    public function 存在しない書籍ID指定された場合（404）()
+    public function 存在しない書籍_i_d指定された場合（404）()
     {
         // Arrange
         // ユーザーを作成
@@ -102,7 +101,7 @@ class BookDestroyApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ（存在しないID '9999' を指定）
-        $response = $this->actingAs($user)->delete('/api/v1/books/9999',);
+        $response = $this->actingAs($user)->delete('/api/v1/books/9999');
 
         // Assert
         $response->assertStatus(404);

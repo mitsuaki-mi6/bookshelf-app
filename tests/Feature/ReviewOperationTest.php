@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Genre;
 use App\Models\Review;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReviewOperationTest extends TestCase
 {
@@ -55,7 +54,7 @@ class ReviewOperationTest extends TestCase
     }
 
     /** @test */
-    public function 認証済で他人のIDでレビュー更新時は403エラー()
+    public function 認証済で他人の_i_dでレビュー更新時は403エラー()
     {
         // Arrange
         // ユーザーを作成
@@ -107,7 +106,7 @@ class ReviewOperationTest extends TestCase
     }
 
     /** @test */
-    public function 認証済で他人のIDでレビュー削除時は403エラー()
+    public function 認証済で他人の_i_dでレビュー削除時は403エラー()
     {
         // Arrange
         // ユーザーを作成

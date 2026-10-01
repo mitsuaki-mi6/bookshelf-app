@@ -2,13 +2,12 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Http\Requests\ReviewRequest;
 use App\Models\Book;
-use App\Models\User;
 use App\Models\Review;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReviewUpdateValidationTest extends TestCase
 {
@@ -29,7 +28,7 @@ class ReviewUpdateValidationTest extends TestCase
         ]);
 
         // バリデーションルールの取得
-        $rules = (new ReviewRequest())->rules();
+        $rules = (new ReviewRequest)->rules();
 
         // データセット(正常系 全ての項目が入力されている)
         $data = [
@@ -61,7 +60,7 @@ class ReviewUpdateValidationTest extends TestCase
         ]);
 
         // バリデーションルールの取得
-        $rules = (new ReviewRequest())->rules();
+        $rules = (new ReviewRequest)->rules();
 
         // データセット(異常系 一部の項目が入力されていない)
         $data = [
@@ -94,7 +93,7 @@ class ReviewUpdateValidationTest extends TestCase
         ]);
 
         // バリデーションルールの取得
-        $rules = (new ReviewRequest())->rules();
+        $rules = (new ReviewRequest)->rules();
 
         // データセット(異常系 一部の項目が入力されていない)
         $data = [
@@ -127,7 +126,7 @@ class ReviewUpdateValidationTest extends TestCase
         ]);
 
         // バリデーションルールの取得
-        $rules = (new ReviewRequest())->rules();
+        $rules = (new ReviewRequest)->rules();
 
         // データセット(異常系 一部の項目が入力されていない)
         $data = [

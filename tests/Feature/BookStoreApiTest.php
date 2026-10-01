@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Genre;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookStoreApiTest extends TestCase
 {
@@ -100,7 +99,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // 256文字以上の有効なURLを作成
-        $longUrl = 'https://example.com/' . str_repeat('a', 240);
+        $longUrl = 'https://example.com/'.str_repeat('a', 240);
 
         // Act
         $response = $this->actingAs($user)->post('/api/v1/books', [
@@ -131,7 +130,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNが13桁未満数字を拒否する()
+    public function バリデーション：_isb_nが13桁未満数字を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -163,7 +162,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNが数字以外を拒否する()
+    public function バリデーション：_isb_nが数字以外を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -195,7 +194,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNの重複を拒否する()
+    public function バリデーション：_isb_nの重複を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -329,7 +328,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 画像URLのURL形式以外を拒否する()
+    public function 画像_ur_lの_ur_l形式以外を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -361,7 +360,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者IDが未設定の場合を拒否する()
+    public function 登録者_i_dが未設定の場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -392,7 +391,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者IDが数値以外の場合を拒否する()
+    public function 登録者_i_dが数値以外の場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -424,7 +423,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者IDが存在しない場合を拒否する()
+    public function 登録者_i_dが存在しない場合を拒否する()
     {
         // Arrange
         // ユーザーを作成

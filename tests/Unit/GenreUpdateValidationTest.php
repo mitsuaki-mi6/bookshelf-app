@@ -2,13 +2,11 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Http\Requests\UpdateGenreRequest;
 use App\Models\Genre;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Route;
-use Illuminate\Http\Request;
+use Tests\TestCase;
 
 class GenreUpdateValidationTest extends TestCase
 {
@@ -19,13 +17,14 @@ class GenreUpdateValidationTest extends TestCase
      */
     private function createRequestWithRoute($genreId)
     {
-        $request = UpdateGenreRequest::create('/genres/' . $genreId, 'PUT');
+        $request = UpdateGenreRequest::create('/genres/'.$genreId, 'PUT');
         $route = new Route('PUT', 'genres/{genre}', [UpdateGenreRequest::class]);
         $route->bind($request);
         $route->setParameter('genre', $genreId);
         $request->setRouteResolver(function () use ($route) {
             return $route;
         });
+
         return $request;
     }
 

@@ -2,12 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Book;
 use App\Models\Genre;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookCreateScreenTest extends TestCase
 {
@@ -41,10 +39,10 @@ class BookCreateScreenTest extends TestCase
 
         // 登録されているジャンル名とそれぞれのチェックボックスの表示確認
         $response->assertSee('小説');
-        $response->assertSee('value="' . $genre1->id . '"', false);
+        $response->assertSee('value="'.$genre1->id.'"', false);
 
         $response->assertSee('マンガ');
-        $response->assertSee('value="' . $genre2->id . '"', false);
+        $response->assertSee('value="'.$genre2->id.'"', false);
 
         // ボタン
         $response->assertSee('キャンセル');

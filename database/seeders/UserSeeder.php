@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Seeders; // ※環境によっては namespace Database\Seeders; のままでOKです
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder

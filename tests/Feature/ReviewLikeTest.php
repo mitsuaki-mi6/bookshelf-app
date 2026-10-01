@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Review;
 use App\Models\ReviewLike;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReviewLikeTest extends TestCase
 {
@@ -79,7 +78,7 @@ class ReviewLikeTest extends TestCase
     public function 未認証ユーザーでいいね登録または解除にアクセス時ログイン画面にリダイレクト()
     {
         // Act
-        $response = $this->post("/reviews/1/like");
+        $response = $this->post('/reviews/1/like');
 
         // Assert: ログイン画面へのリダイレクト確認
         $response->assertRedirect(route('login'));

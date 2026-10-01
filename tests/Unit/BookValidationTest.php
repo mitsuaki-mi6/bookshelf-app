@@ -2,13 +2,12 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Http\Requests\StoreBookRequest;
-use App\Models\Genre;
 use App\Models\Book;
+use App\Models\Genre;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookValidationTest extends TestCase
 {
@@ -29,7 +28,7 @@ class BookValidationTest extends TestCase
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(正常系 全ての項目が入力されている)
         $data = [
@@ -54,7 +53,7 @@ class BookValidationTest extends TestCase
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(異常系 必須項目が未入力)
         $data = [
@@ -82,7 +81,7 @@ class BookValidationTest extends TestCase
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(制限文字オーバー：256文字の文字列を作成)
         $data = [
@@ -106,7 +105,7 @@ class BookValidationTest extends TestCase
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(制限文字オーバー：256文字の文字列を作成)
         $data = [
@@ -126,11 +125,11 @@ class BookValidationTest extends TestCase
     }
 
     /** @test */
-    public function ISBNが数字以外を拒否する()
+    public function isb_nが数字以外を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(ISBNが数字以外)
         $data = [
@@ -150,11 +149,11 @@ class BookValidationTest extends TestCase
     }
 
     /** @test */
-    public function ISBNが13桁未満数字を拒否する()
+    public function isb_nが13桁未満数字を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(ISBNが13桁未満)
         $data = [
@@ -172,12 +171,13 @@ class BookValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('isbn', $validator->errors()->toArray());
     }
+
     /** @test */
-    public function ISBNが14桁数字を拒否する()
+    public function isb_nが14桁数字を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(ISBNが14桁数字)
         $data = [
@@ -195,8 +195,9 @@ class BookValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('isbn', $validator->errors()->toArray());
     }
+
     /** @test */
-    public function ISBNの重複を拒否する()
+    public function isb_nの重複を拒否する()
     {
         // Arrange
         $user = User::factory()->create();
@@ -209,7 +210,7 @@ class BookValidationTest extends TestCase
         ]);
 
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(ISBNが重複)
         $data = [
@@ -227,12 +228,13 @@ class BookValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('isbn', $validator->errors()->toArray());
     }
+
     /** @test */
     public function 出版日が日付形式以外を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(出版日が日付形式以外)
         $data = [
@@ -250,12 +252,13 @@ class BookValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('published_date', $validator->errors()->toArray());
     }
+
     /** @test */
     public function ジャンルの未指定を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(ジャンルが未指定)
         $data = [
@@ -273,12 +276,13 @@ class BookValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('genres', $validator->errors()->toArray());
     }
+
     /** @test */
-    public function ジャンルがDBに存在しない場合拒否する()
+    public function ジャンルが_d_bに存在しない場合拒否する()
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(ジャンルが存在しない)
         $data = [
@@ -297,12 +301,13 @@ class BookValidationTest extends TestCase
         $errors = $validator->errors()->keys();
         $this->assertTrue(in_array('genres', $errors) || in_array('genres.0', $errors));
     }
+
     /** @test */
-    public function 画像URLのURL形式以外を拒否する()
+    public function 画像_ur_lの_ur_l形式以外を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new StoreBookRequest())->rules();
+        $rules = (new StoreBookRequest)->rules();
 
         // データセット(画像URLがURL形式以外)
         $data = [

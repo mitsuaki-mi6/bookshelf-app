@@ -2,12 +2,10 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Http\Requests\GenreRequest;
 use App\Models\Genre;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class GenreValidationTest extends TestCase
 {
@@ -18,7 +16,7 @@ class GenreValidationTest extends TestCase
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new GenreRequest())->rules();
+        $rules = (new GenreRequest)->rules();
 
         // データセット(正常系 全ての項目が入力されている)
         $data = [
@@ -37,7 +35,7 @@ class GenreValidationTest extends TestCase
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new GenreRequest())->rules();
+        $rules = (new GenreRequest)->rules();
 
         // データセット(必須項目が未入力)
         $data = [
@@ -57,11 +55,11 @@ class GenreValidationTest extends TestCase
     {
         // Arrange
         // バリデーションルールの取得
-        $rules = (new GenreRequest())->rules();
+        $rules = (new GenreRequest)->rules();
 
         // データセット(ジャンル名の文字数上限オーバー)
         $data = [
-            'name' =>  str_repeat('あ', 256), // 255文字を超える文字列,
+            'name' => str_repeat('あ', 256), // 255文字を超える文字列,
         ];
 
         // Act バリデーションの実行
@@ -81,7 +79,7 @@ class GenreValidationTest extends TestCase
         ]);
 
         // バリデーションルールの取得
-        $rules = (new GenreRequest())->rules();
+        $rules = (new GenreRequest)->rules();
 
         // データセット(ジャンル名が重複)
         $data = [

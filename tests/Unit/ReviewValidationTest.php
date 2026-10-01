@@ -2,12 +2,11 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Http\Requests\ReviewRequest;
 use App\Models\Book;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReviewValidationTest extends TestCase
 {
@@ -21,7 +20,7 @@ class ReviewValidationTest extends TestCase
         $user = User::factory()->create();
         $book = Book::factory()->create(['user_id' => $user->id]);
         // バリデーションルールの取得
-        $rules = (new ReviewRequest())->rules();
+        $rules = (new ReviewRequest)->rules();
 
         // データセット(正常系 全ての項目が入力されている)
         $data = [
@@ -45,7 +44,7 @@ class ReviewValidationTest extends TestCase
         $user = User::factory()->create();
         $book = Book::factory()->create(['user_id' => $user->id]);
         // バリデーションルールの取得
-        $rules = (new ReviewRequest())->rules();
+        $rules = (new ReviewRequest)->rules();
 
         // データセット(異常系 必須項目が未入力)
         $data = [
@@ -71,7 +70,7 @@ class ReviewValidationTest extends TestCase
         $user = User::factory()->create();
         $book = Book::factory()->create(['user_id' => $user->id]);
         // バリデーションルールの取得
-        $rules = (new ReviewRequest())->rules();
+        $rules = (new ReviewRequest)->rules();
 
         // データセット(評価が1～5以外)
         $data = [
@@ -96,13 +95,13 @@ class ReviewValidationTest extends TestCase
         $user = User::factory()->create();
         $book = Book::factory()->create(['user_id' => $user->id]);
         // バリデーションルールの取得
-        $rules = (new ReviewRequest())->rules();
+        $rules = (new ReviewRequest)->rules();
 
         // データセット(コメントの文字数上限オーバー)
         $data = [
             'user_id' => $user->id,
             'rating' => 6,
-            'comment' =>  str_repeat('あ', 1001), // 1000文字を超える文字列,
+            'comment' => str_repeat('あ', 1001), // 1000文字を超える文字列,
         ];
 
         // Act バリデーションの実行

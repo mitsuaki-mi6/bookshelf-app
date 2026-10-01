@@ -3,18 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
 use App\Http\Requests\Api\V1\IndexBookRequest;
 use App\Http\Requests\Api\V1\StoreBookRequest;
 use App\Http\Requests\Api\V1\UpdateBookRequest;
 use App\Http\Resources\Api\V1\BookResource;
 use App\Models\Book;
-use App\Models\Genre;
-use App\Models\Favorite;
-
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class BookController extends Controller
 {
@@ -66,7 +59,6 @@ class BookController extends Controller
         // APIリソースを使って単体データを整形して返却(1件)
         return new BookResource($book);
     }
-
 
     // 書籍を新規登録する(POST /api/v1/books)
     public function store(StoreBookRequest $request)

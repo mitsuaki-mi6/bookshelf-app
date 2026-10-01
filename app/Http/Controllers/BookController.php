@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Book;
-use App\Models\Genre;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+use App\Models\Book;
+use App\Models\Genre;
 use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
@@ -30,6 +29,7 @@ class BookController extends Controller
 
         return view('books.show', compact('book'));
     }
+
     // 書籍を削除する
     public function destroy(Book $book)
     {
@@ -57,8 +57,10 @@ class BookController extends Controller
     public function create()
     {
         $genres = Genre::all();
+
         return view('books.create', compact('genres'));
     }
+
     // 書籍を登録する
     public function store(StoreBookRequest $request)
     {

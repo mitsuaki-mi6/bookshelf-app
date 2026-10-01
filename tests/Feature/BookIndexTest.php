@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Genre;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookIndexTest extends TestCase
 {
@@ -151,7 +150,6 @@ class BookIndexTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-
     /** @test */
     public function ゲストユーザーでジャンル管理クリックでログイン画面にリダイレクト確認()
     {
@@ -174,7 +172,6 @@ class BookIndexTest extends TestCase
         // Assert: ランキングが表示される_認証済
         $response->assertStatus(200);
     }
-
 
     /** @test */
     public function 認証済みユーザーで書籍登録クリックで書籍登録画面に遷移()

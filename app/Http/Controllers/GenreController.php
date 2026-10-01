@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Genre;
 use App\Http\Requests\GenreRequest;
 use App\Http\Requests\UpdateGenreRequest;
+use App\Models\Genre;
 
 class GenreController extends Controller
 {
@@ -32,6 +31,7 @@ class GenreController extends Controller
     {
         return view('genres.create');
     }
+
     // PG07	ジャンル登録
     public function store(GenreRequest $request)
     {
@@ -45,6 +45,7 @@ class GenreController extends Controller
     public function edit($id)
     {
         $genre = Genre::findOrFail($id);
+
         return view('genres.edit', compact('genre'));
     }
 

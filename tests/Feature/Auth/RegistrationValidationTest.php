@@ -15,7 +15,7 @@ class RegistrationValidationTest extends TestCase
     /** @test */
     public function 必須項目が正常な値で入力されて登録できること(): void
     {
-        $creator = new CreateNewUser();
+        $creator = new CreateNewUser;
         // Arrange
         $user = $creator->create([
             'name' => 'テストユーザー',
@@ -33,7 +33,7 @@ class RegistrationValidationTest extends TestCase
     {
         $this->expectException(ValidationException::class);
 
-        $creator = new CreateNewUser();
+        $creator = new CreateNewUser;
         $creator->create([
             'name' => '',
             'email' => '',
@@ -47,7 +47,7 @@ class RegistrationValidationTest extends TestCase
     {
         $this->expectException(ValidationException::class);
 
-        $creator = new CreateNewUser();
+        $creator = new CreateNewUser;
         $creator->create([
             'name' => 'テストユーザー',
             'email' => 'invalid-email',
@@ -61,7 +61,7 @@ class RegistrationValidationTest extends TestCase
     {
         $this->expectException(ValidationException::class);
 
-        $creator = new CreateNewUser();
+        $creator = new CreateNewUser;
         $creator->create([
             'name' => 'テストユーザー',
             'email' => 'test@example.com',
@@ -75,7 +75,7 @@ class RegistrationValidationTest extends TestCase
     {
         $this->expectException(ValidationException::class);
 
-        $creator = new CreateNewUser();
+        $creator = new CreateNewUser;
         $creator->create([
             'name' => 'テストユーザー',
             'email' => 'test@example.com',

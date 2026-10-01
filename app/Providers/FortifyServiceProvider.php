@@ -44,7 +44,8 @@ class FortifyServiceProvider extends ServiceProvider
 
         // ログアウト後のリダイレクト先をログイン画面に変更
         $this->app->singleton(LogoutResponse::class, function () {
-            return new class implements LogoutResponse {
+            return new class implements LogoutResponse
+            {
                 public function toResponse($request)
                 {
                     return redirect('/login');
@@ -53,7 +54,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
         });

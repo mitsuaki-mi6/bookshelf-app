@@ -2,17 +2,16 @@
 
 namespace Tests\Feature\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class LoginValidationTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function ID、passが正常な値で入力されてパスできること()
+    public function i_d、passが正常な値で入力されてパスできること()
     {
         // Arrange
         // ユーザーを作成
