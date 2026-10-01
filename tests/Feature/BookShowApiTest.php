@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Genre;
 use App\Models\Review;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookShowApiTest extends TestCase
 {
@@ -64,11 +63,11 @@ class BookShowApiTest extends TestCase
     }
 
     /** @test */
-    public function 存在しない書籍ID指定された場合（404）(): void
+    public function 存在しない書籍_i_d指定された場合（404）(): void
     {
         // Act
         // 書籍一覧APIにGETリクエストを送信
-        $response = $this->getJson("/api/v1/books/999");
+        $response = $this->getJson('/api/v1/books/999');
 
         // Assert
         // バリデーション通過しステータスコードが404であることを確認

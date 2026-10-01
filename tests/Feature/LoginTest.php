@@ -2,11 +2,9 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
@@ -23,7 +21,7 @@ class LoginTest extends TestCase
         ]);
 
         // Act: 登録ユーザーでログイン
-        $response = $this->post("/login", [
+        $response = $this->post('/login', [
             'email' => 'test@test.com',
             'password' => 'password123',
         ]);
@@ -47,7 +45,7 @@ class LoginTest extends TestCase
         ]);
 
         // Act: 登録ユーザーでログイン
-        $response = $this->post("/login", [
+        $response = $this->post('/login', [
             'email' => 'othertest@test.com',
             'password' => 'password123',
         ]);
@@ -69,7 +67,7 @@ class LoginTest extends TestCase
         ]);
 
         // Act: 登録ユーザーでログイン
-        $response = $this->post("/login", [
+        $response = $this->post('/login', [
             'email' => 'test@test.com',
             'password' => 'password999',
         ]);

@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Favorite;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class FavoriteToggleTest extends TestCase
 {
@@ -64,7 +63,7 @@ class FavoriteToggleTest extends TestCase
     public function 未認証ユーザーでお気に入り登録または解除にアクセス時ログイン画面にリダイレクト()
     {
         // Act
-        $response = $this->post("/books/1/favorites");
+        $response = $this->post('/books/1/favorites');
 
         // Assert: ログイン画面へのリダイレクト確認
         $response->assertRedirect(route('login'));

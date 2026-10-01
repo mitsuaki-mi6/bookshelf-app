@@ -27,11 +27,11 @@ class BookResource extends JsonResource
             // レビューの平均値
             'average_rating' => $this->when(
                 $this->relationLoaded('reviews'),
-                fn() => $this->reviews->avg('rating')
+                fn () => $this->reviews->avg('rating')
             ),
 
             // レビュー件数
-            'reviews_count' => $this->whenLoaded('reviews', fn() => $this->reviews->count()),
+            'reviews_count' => $this->whenLoaded('reviews', fn () => $this->reviews->count()),
 
             // レビュー詳細一覧
             'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),

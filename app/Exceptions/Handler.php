@@ -2,9 +2,8 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -30,7 +29,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'message' => '指定された書籍が見つかりませんでした。'
+                    'message' => '指定された書籍が見つかりませんでした。',
                 ], 404);
             }
         });
@@ -39,7 +38,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (ModelNotFoundException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'message' => '指定された書籍が見つかりませんでした。'
+                    'message' => '指定された書籍が見つかりませんでした。',
                 ], 404);
             }
         });

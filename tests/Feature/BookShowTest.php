@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
+use App\Models\Favorite;
 use App\Models\Genre;
 use App\Models\Review;
-use App\Models\Favorite;
 use App\Models\ReviewLike;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookShowTest extends TestCase
 {
@@ -94,7 +93,7 @@ class BookShowTest extends TestCase
         $book = Book::factory()->create();
 
         // Act: ゲストユーザーでお気に入りクリック
-        $response = $this->post('/books/' . $book->id . '/favorites');
+        $response = $this->post('/books/'.$book->id.'/favorites');
 
         // Assert: ログイン画面にリダイレクトされる_ゲスト
         $response->assertRedirect('/login');
@@ -112,7 +111,7 @@ class BookShowTest extends TestCase
         ]);
 
         // Act: ゲストユーザーでいいねクリック
-        $response = $this->post('/reviews/' . $review->id . '/like');
+        $response = $this->post('/reviews/'.$review->id.'/like');
 
         // Assert: ログイン画面にリダイレクトされる_ゲスト
         $response->assertRedirect('/login');
@@ -210,7 +209,7 @@ class BookShowTest extends TestCase
     }
 
     /** @test */
-    public function 認証済認可済ユーザーのアクセス時お気に入り_ONが正しく表示されている()
+    public function 認証済認可済ユーザーのアクセス時お気に入り_o_nが正しく表示されている()
     {
         // Arrange
         $user = User::factory()->create(); // 認証済みユーザーを作成
@@ -247,7 +246,7 @@ class BookShowTest extends TestCase
     }
 
     /** @test */
-    public function 認証済認可済ユーザーのアクセス時画像URL無しでも書籍情報が正しく表示される()
+    public function 認証済認可済ユーザーのアクセス時画像_ur_l無しでも書籍情報が正しく表示される()
     {
         // Arrange
         $user = User::factory()->create(); // 認証済みユーザーを作成
@@ -309,7 +308,7 @@ class BookShowTest extends TestCase
     }
 
     /** @test */
-    public function データベースに存在しない書籍IDを指定してアクセスした場合に、404が返される()
+    public function データベースに存在しない書籍_i_dを指定してアクセスした場合に、404が返される()
     {
         // Arrange
         $user = User::factory()->create(); // 認証済みユーザーを作成

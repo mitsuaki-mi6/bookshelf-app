@@ -2,14 +2,13 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Http\Requests\UpdateBookRequest;
-use App\Models\Genre;
 use App\Models\Book;
+use App\Models\Genre;
 use App\Models\User;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Routing\Route;
+use Tests\TestCase;
 
 class BookUpdateValidationTest extends TestCase
 {
@@ -55,7 +54,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function ISBNのが自分と同じ値は正常に動作する()
+    public function isb_nのが自分と同じ値は正常に動作する()
     {
         // Arrange
         $user = User::factory()->create();
@@ -167,7 +166,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function ISBNが数字以外を拒否する()
+    public function isb_nが数字以外を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -191,7 +190,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function ISBNが13桁未満数字を拒否する()
+    public function isb_nが13桁未満数字を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -213,8 +212,9 @@ class BookUpdateValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('isbn', $validator->errors()->toArray());
     }
+
     /** @test */
-    public function ISBNが14桁数字を拒否する()
+    public function isb_nが14桁数字を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -236,8 +236,9 @@ class BookUpdateValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('isbn', $validator->errors()->toArray());
     }
+
     /** @test */
-    public function ISBNの重複を拒否する_自分以外()
+    public function isb_nの重複を拒否する_自分以外()
     {
         // Arrange
         $user = User::factory()->create();
@@ -292,6 +293,7 @@ class BookUpdateValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('published_date', $validator->errors()->toArray());
     }
+
     /** @test */
     public function ジャンルの未指定を拒否する()
     {
@@ -315,8 +317,9 @@ class BookUpdateValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('genres', $validator->errors()->toArray());
     }
+
     /** @test */
-    public function ジャンルがDBに存在しない場合拒否する()
+    public function ジャンルが_d_bに存在しない場合拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -339,8 +342,9 @@ class BookUpdateValidationTest extends TestCase
         $errors = $validator->errors()->keys();
         $this->assertTrue(in_array('genres', $errors) || in_array('genres.0', $errors));
     }
+
     /** @test */
-    public function 画像URLのURL形式以外を拒否する()
+    public function 画像_ur_lの_ur_l形式以外を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -369,14 +373,14 @@ class BookUpdateValidationTest extends TestCase
      */
     protected function getRules($book = null)
     {
-        $request = new \App\Http\Requests\UpdateBookRequest();
+        $request = new UpdateBookRequest;
 
-        if (!$book) {
-            $book = \App\Models\Book::factory()->create();
+        if (! $book) {
+            $book = Book::factory()->create();
         }
 
         // ルーターに登録せず、ルートインスタンスに直接パラメータをセットする（一番安全で確実な方法）
-        $route = new \Illuminate\Routing\Route(['PUT'], 'books/{book}', []);
+        $route = new Route(['PUT'], 'books/{book}', []);
         $route->parameters['book'] = $book;
 
         // リクエストにルートリゾルバを設定

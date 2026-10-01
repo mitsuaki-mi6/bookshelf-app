@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Book;
-use App\Models\User;
 use App\Models\Genre;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class BookSeeder extends Seeder
 {
@@ -112,7 +112,7 @@ class BookSeeder extends Seeder
             unset($bookData['genres']);
 
             $bookData['user_id'] = $user->id;
-            $bookData['image_url'] = 'https://placehold.co/200x300/e2e8f0/475569?text=' . ($index + 1);
+            $bookData['image_url'] = 'https://placehold.co/200x300/e2e8f0/475569?text='.($index + 1);
 
             $book = Book::firstOrCreate(
                 ['isbn' => $bookData['isbn']],

@@ -13,6 +13,7 @@ class UpdateBookRequest extends FormRequest
     {
         return true;
     }
+
     // 書籍更新バリデーションルール
     public function rules(): array
     {
@@ -21,12 +22,13 @@ class UpdateBookRequest extends FormRequest
             'genres.*' => ['integer', 'exists:genres,id'],
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
-            'isbn' => ['required', 'string', 'digits:13', 'unique:books,isbn,' . $this->route('book')->id],
+            'isbn' => ['required', 'string', 'digits:13', 'unique:books,isbn,'.$this->route('book')->id],
             'published_date' => ['required', 'date', 'max:10'],
             'description' => ['nullable', 'string', 'max:255'],
             'image_url' => ['nullable', 'url', 'max:255'],
         ];
     }
+
     // バリデーションメッセージ
     public function messages(): array
     {

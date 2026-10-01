@@ -18,9 +18,10 @@ class UpdateGenreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:genres,name,' . $this->route('genre')],
+            'name' => ['required', 'string', 'max:255', 'unique:genres,name,'.$this->route('genre')],
         ];
     }
+
     // バリデーションメッセージ
     public function messages(): array
     {

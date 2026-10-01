@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
+use App\Models\Favorite;
 use App\Models\Genre;
 use App\Models\Review;
-use App\Models\Favorite;
 use App\Models\ReviewLike;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class BookCrudTest extends TestCase
 {
@@ -169,7 +168,7 @@ class BookCrudTest extends TestCase
         ]);
 
         // Act
-        $response = $this->actingAs($user)->put("/books/9999", [
+        $response = $this->actingAs($user)->put('/books/9999', [
             'description' => '更新説明',
             'genres' => [$genre2->id],
         ]);
@@ -279,7 +278,7 @@ class BookCrudTest extends TestCase
         $user = User::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->delete("/books/999");
+        $response = $this->actingAs($user)->delete('/books/999');
 
         // Assert
         $response->assertStatus(404);
@@ -326,7 +325,7 @@ class BookCrudTest extends TestCase
         $user = User::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->get("/books/999");
+        $response = $this->actingAs($user)->get('/books/999');
 
         // Assert
         $response->assertStatus(404);
@@ -336,7 +335,7 @@ class BookCrudTest extends TestCase
     public function 未認証ユーザーで書籍登録しようとした場合ログイン画面にリダイレクト()
     {
         // Act: 未認証ユーザーで書籍登録にアクセス
-        $response = $this->post("/books");
+        $response = $this->post('/books');
 
         // Assert: ログイン画面へのリダイレクト確認
         $response->assertRedirect(route('login'));

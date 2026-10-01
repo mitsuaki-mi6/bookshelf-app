@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Genre;
 use App\Models\Review;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class RankingTest extends TestCase
 {
@@ -29,17 +28,17 @@ class RankingTest extends TestCase
         $book1 = Book::factory()->create([
             'user_id' => $user1->id,
             'title' => 'テストランキング１',
-            'author' => 'テスト著者１'
+            'author' => 'テスト著者１',
         ]);
         $book2 = Book::factory()->create([
             'user_id' => $user2->id,
             'title' => 'テストランキング２',
-            'author' => 'テスト著者２'
+            'author' => 'テスト著者２',
         ]);
         $book3 = Book::factory()->create([
             'user_id' => $user3->id,
             'title' => 'テストランキング３',
-            'author' => 'テスト著者３'
+            'author' => 'テスト著者３',
         ]);
 
         // レビューを作成（book_idを紐付ける）
@@ -181,7 +180,7 @@ class RankingTest extends TestCase
         $book = Book::factory()->create([
             'user_id' => $user->id,
             'title' => 'テストランキング',
-            'author' => 'テスト著者'
+            'author' => 'テスト著者',
         ]);
 
         // レビューを作成（book_idを紐付ける）

@@ -17,8 +17,8 @@ class IndexBookRequest extends FormRequest
         return [
             'keyword' => ['nullable', 'string', 'max:255'],
             'genre_id' => ['nullable', 'integer', 'exists:genres,id'],
-            'per_page'   => ['nullable', 'integer', 'min:1', 'max:100'],
-            'page'       => ['nullable', 'integer', 'min:1'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'page' => ['nullable', 'integer', 'min:1'],
 
         ];
     }

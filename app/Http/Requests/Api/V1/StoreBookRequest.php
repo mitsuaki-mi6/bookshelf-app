@@ -5,10 +5,8 @@ namespace App\Http\Requests\Api\V1;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBookRequest extends FormRequest
-
 {
     public function authorize(): bool
-
     {
         return true;
     }
@@ -23,11 +21,12 @@ class StoreBookRequest extends FormRequest
             'author' => ['required', 'string', 'max:255'],
             'isbn' => ['required', 'string', 'digits:13', 'unique:books,isbn'],
             'published_date' => ['required', 'date', 'max:10'],
-            'description'    => ['nullable', 'string', 'max:255'],
-            'image_url'    => ['nullable', 'url', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'image_url' => ['nullable', 'url', 'max:255'],
             'user_id' => ['required', 'integer', 'exists:users,id'],
         ];
     }
+
     // バリデーションメッセージ
     public function messages(): array
     {

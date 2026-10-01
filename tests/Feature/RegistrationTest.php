@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
 
 class RegistrationTest extends TestCase
 {
@@ -15,7 +13,7 @@ class RegistrationTest extends TestCase
     public function ゲストユーザの会員登録処理で会員情報が登録される()
     {
         // Act: 未認証ユーザー会員情報を登録
-        $response = $this->post("/register", [
+        $response = $this->post('/register', [
             'name' => '新規ユーザ',
             'email' => 'test@test.com',
             'password' => 'password123',

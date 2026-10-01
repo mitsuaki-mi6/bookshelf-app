@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\ReviewRequest;
 use App\Http\Requests\StoreReviewRequest;  // 投稿用
-use App\Http\Requests\ReviewRequest;        // 更新用
-use App\Models\Book;
+use App\Models\Book;        // 更新用
 use App\Models\Review;
+use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
@@ -29,6 +29,7 @@ class ReviewController extends Controller
         if ($review->user_id !== auth()->id()) {
             abort(403);
         }
+
         return view('reviews.edit', compact('book', 'review'));
     }
 
@@ -41,6 +42,7 @@ class ReviewController extends Controller
         }
 
         $review->update($request->validated());
+
         return redirect()->route('books.show', $review->book)->with('success', 'レビューを更新しました。');
     }
 

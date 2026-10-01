@@ -1,7 +1,7 @@
 <?php
 
-use Laravel\Fortify\Features;
-use App\Providers\RouteServiceProvider;  // ← 20260828 追加 MN
+use App\Providers\RouteServiceProvider;
+use Laravel\Fortify\Features;  // ← 20260828 追加 MN
 
 return [
 
