@@ -17,13 +17,32 @@ class ReviewSeeder extends Seeder
         $users = User::all();
         $books = Book::all();
 
-        // 32件のレビューを配分して作成
-        $comments = [
-            'とても面白く、一気に読んでしまいました。',
-            '学びが多く、何度も読み返したくなる一冊です。',
-            '期待通りの内容で大満足でした。',
-            '少し展開が難しかったですが、良書です。',
-            '非常に考えさせられる深いテーマでした。',
+        // レビューのテンプレート
+        $reviewsTemplates = [
+            5 => [
+                "素晴らしい本でした！",
+                "人生が変わりました。",
+                "何度も読み返しています。",
+            ],
+            4 => [
+                "とても参考になりました。",
+                "読みやすくておすすめです。",
+                "期待通りの内容でした。",
+            ],
+            3 => [
+                "普通でした。",
+                "可もなく不可もなく。",
+                "期待したほどではなかった。",
+            ],
+            2 => [
+                "少し期待外れでした。",
+                "内容が薄い印象。",
+                "もう少し深掘りしてほしかった。",
+            ],
+            1 => [
+                "残念ながら合いませんでした。",
+                "期待と違いました。",
+            ],
         ];
 
         $count = 0;
@@ -37,11 +56,13 @@ class ReviewSeeder extends Seeder
                     break 2;
                 }
 
+                $rating = rand(1, 5); // 評価 1〜5
+
                 Review::create([
                     'user_id' => $user->id,
                     'book_id' => $book->id,
-                    'rating' => rand(3, 5), // 評価 3〜5
-                    'comment' => $comments[array_rand($comments)],
+                    'rating' => $rating,
+                    'comment' => $reviewsTemplates[$rating][array_rand($reviewsTemplates[$rating])], // 決定した評価に対応するコメントを選ぶ
                 ]);
                 $count++;
             }

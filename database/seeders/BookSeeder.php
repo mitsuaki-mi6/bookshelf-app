@@ -14,7 +14,7 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::first(); // 登録者は山田太郎
+        $users = User::all();
 
         $books = [
             [
@@ -111,8 +111,8 @@ class BookSeeder extends Seeder
             $genreNames = $bookData['genres'];
             unset($bookData['genres']);
 
-            $bookData['user_id'] = $user->id;
-            $bookData['image_url'] = 'https://placehold.co/200x300/e2e8f0/475569?text='.($index + 1);
+            $bookData['user_id'] = $users->random()->id; // 各書籍ごとにランダムなユーザーを割り当てる
+            $bookData['image_url'] = 'https://placehold.co/200x300/e2e8f0/475569?text=' . ($index + 1);
 
             $book = Book::firstOrCreate(
                 ['isbn' => $bookData['isbn']],
