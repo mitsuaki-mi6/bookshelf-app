@@ -75,5 +75,20 @@ Route::middleware('auth')->group(
 
         // ジャンル削除
         Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
+
+        // PG14	マイ読書レポート（ダミー）
+        Route::get('/reports', function () {
+            return 'マイ読書レポート（準備中）';
+        })->name('reports.index');
+
+        // PG15 読書計画一覧（ダミー）
+        Route::get('/reading-plans', function () {
+            return '読書計画一覧（準備中）';
+        })->name('reading-plans.index');
+
+        // PG18 通知一覧（ダミー）
+        Route::get('/notifications', function () {
+            return '通知一覧（準備中）';
+        })->name('notifications.index');
     }
 );

@@ -22,8 +22,8 @@ class StoreBookRequest extends FormRequest
             'genres.*' => ['integer', 'exists:genres,id'],
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
-            'isbn' => ['required', 'string', 'digits:13', 'unique:books,isbn'],
-            'published_date' => ['required', 'date', 'max:10'],
+            'isbn' => ['nullable', 'string', 'digits:13', 'unique:books,isbn'], // required → nullableに変更　2026/10/10 MN
+            'published_date' => ['nullable', 'date', 'max:10'], // required → nullableに変更　2026/10/10 MN
             'description' => ['nullable', 'string', 'max:255'],
             'image_url' => ['nullable', 'url', 'max:255'],
         ];
@@ -37,10 +37,10 @@ class StoreBookRequest extends FormRequest
             'title.max' => '書籍名は255文字以内で入力してください',
             'author.required' => '著者を入力してください',
             'author.max' => '著者名は255文字以内で入力してください',
-            'isbn.required' => 'ISBNコードを入力してください',
+            // 'isbn.required' => 'ISBNコードを入力してください',  削除  2026/10/10 MN
             'isbn.digits' => 'ISBNコードは数字13文字で入力してください',
             'isbn.unique' => 'そのISBNコードは既に使用されています',
-            'published_date.required' => '出版日を入力してください',
+            // 'published_date.required' => '出版日を入力してください',  削除  2026/10/10 MN
             'published_date.date' => '出版日は有効な日付形式で入力してください',
             'published_date.max' => '出版日は有効な日付形式で入力してください',
             'description.max' => '説明は255文字以内で入力してください',
