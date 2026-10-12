@@ -5,6 +5,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReadingPlanController;
 use Illuminate\Support\Facades\Route;
 
 // 書籍関係
@@ -76,15 +77,29 @@ Route::middleware('auth')->group(
         // ジャンル削除
         Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
 
+
+        // 読書計画関係
+        // PG15 読書計画一覧
+        Route::get('/reading-plans', [ReadingPlanController::class, 'index'])->name('reading-plans.index');
+
+        // PG16	読書計画作成処理
+        Route::get('/reading-plans/create', [ReadingPlanController::class, 'create'])->name('reading-plans.create');
+        Route::post('/reading-plans', [ReadingPlanController::class, 'store'])->name('reading-plans.store');
+
+        // PG17	読書計画編集処理
+        Route::get('/reading-plans/{reading_plan}/edit', [ReadingPlanController::class, 'edit'])->name('reading-plans.edit');
+        Route::put('/reading-plans/{reading_plan}', [ReadingPlanController::class, 'update'])->name('reading-plans.update');
+        Route::post('/reading-plans/{reading_plan}/complete', [ReadingPlanController::class, 'complete'])->name('reading-plans.complete');
+
+        // 書計画削除処理
+        Route::delete('/reading-plans/{reading_plan}', [ReadingPlanController::class, 'destroy'])->name('reading-plans.destroy');
+
+
+
         // PG14	マイ読書レポート（ダミー）
         Route::get('/reports', function () {
             return 'マイ読書レポート（準備中）';
         })->name('reports.index');
-
-        // PG15 読書計画一覧（ダミー）
-        Route::get('/reading-plans', function () {
-            return '読書計画一覧（準備中）';
-        })->name('reading-plans.index');
 
         // PG18 通知一覧（ダミー）
         Route::get('/notifications', function () {
