@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexBookRequest;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
@@ -11,9 +12,54 @@ use Illuminate\Support\Facades\Auth;
 class BookController extends Controller
 {
     // PG01 書籍一覧（トップ）
-    public function index()
+    public function index(IndexBookRequest $request)
     {
-        $books = Book::with('genres')->paginate(10);
+        // バリデーションは IndexBookRequest で実行済み
+        $request->validated();
+
+        $query = Book::query();
+
+        // キーワード検索（書籍名、著者の部分一致）
+        if ($request->filled('keyword')) {
+            $keyword = $request->input('keyword');
+            $query->where(function ($q) use ($keyword) {
+                $q->whereRaw('title COLLATE utf8mb4_bin LIKE ?', ['%' . $keyword . '%'])
+                    ->orWhereRaw('author COLLATE utf8mb4_bin LIKE ?', ['%' . $keyword . '%']);
+            });
+        }
+
+        // ジャンル検索（多対多のリレーションを考慮）
+        if ($request->filled('genre')) {
+            $genreId = $request->input('genre');
+            $query->whereHas('genres', function ($q) use ($genreId) {
+                $q->where('genres.id', $genreId);
+            });
+        }
+
+        // ソート処理
+        $sort = $request->input('sort', 'latest'); // デフォルトは latest
+
+        // 評価順ソートのために平均評価をあらかじめロードしておく
+        $query->withAvg('reviews', 'rating');
+
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'rating':
+                // 評価が高い順
+                $query->orderByDesc('reviews_avg_rating');
+                break;
+            case 'latest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $books = $query->with('genres')->paginate(10)->withQueryString();
         $genres = Genre::all();
 
         return view('books.index', compact('books', 'genres'));
