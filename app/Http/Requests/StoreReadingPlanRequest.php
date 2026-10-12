@@ -20,7 +20,6 @@ class StoreReadingPlanRequest extends FormRequest
         return [
             'book_id' => ['required', 'integer', 'exists:books,id'],
             'target_date' => ['required', 'date', 'after_or_equal:today'],
-            'status' => ['required', 'string', 'in:進行中,完了,期限切れ'],
         ];
     }
 
@@ -34,8 +33,6 @@ class StoreReadingPlanRequest extends FormRequest
             'target_date.required' => '目標日を入力してください',
             'target_date.date' => '目標日は有効な日付形式で入力してください',
             'target_date.after_or_equal' => '目標日は今日以降の日付を入力してください',
-            'status.required' => 'ステータスを入力してください',
-            'status.in' => '無効なステータスが指定されています',
         ];
     }
 }

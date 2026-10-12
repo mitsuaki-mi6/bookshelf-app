@@ -23,14 +23,17 @@ class ReadingPlanController extends Controller
                 return $query->where('status', $status);
             })
             ->get();
-
-        return view('reading_plans.index', compact('readingPlans', 'status'));
+        // 変数名をBlade側が求めている $currentStatus に合わせる
+        return view('reading-plans.index', compact('readingPlans'))->with('currentStatus', $status);
     }
+
     // PG16 読書計画作成
     // PG16 読書計画作成画面表示
     public function create()
     {
-        return view('reading_plans.create');
+        $books = \App\Models\Book::all();
+
+        return view('reading-plans.create', compact('books'));
     }
 
     // PG16 読書計画作成処理
@@ -38,13 +41,16 @@ class ReadingPlanController extends Controller
     {
         $data = $request->validated();
 
+        // 新規作成時は「進行中 (in_progress)」をデフォルト設定する
+        $data['status'] = \App\Enums\ReadingPlanStatus::IN_PROGRESS->value;
+
         // ログイン中のユーザーIDを動的に設定する
         $data['user_id'] = auth()->id();
 
         // 読書計画テーブルに登録
         ReadingPlan::create($data);
 
-        return redirect()->route('reading_plans.index')->with('success', '読書計画を登録しました。');
+        return redirect()->route('reading-plans.index')->with('success', '読書計画を登録しました。');
     }
 
     // PG17	読書計画編集
@@ -56,7 +62,8 @@ class ReadingPlanController extends Controller
             abort(403);
         }
 
-        return view('reading_plans.edit', compact('reading_plan'));
+        // 変数名を Blade 側が求めている $readingPlan に合わせる
+        return view('reading-plans.edit', ['readingPlan' => $reading_plan]);
     }
 
     // PG17	読書計画更新処理
@@ -70,7 +77,24 @@ class ReadingPlanController extends Controller
         // バリデーション済みのデータを取得し、読書計画情報を更新
         $reading_plan->update($request->validated());
 
-        return redirect()->route('reading_plans.index')->with('success', '読書計画を更新しました。');
+        return redirect()->route('reading-plans.index')->with('success', '読書計画を更新しました。');
+    }
+
+    // 読書計画を完了（読了する）にする
+    public function complete(ReadingPlan $reading_plan)
+    {
+        // 読書計画の所有者がログイン中のユーザーでなければ403エラーを返す
+        if ($reading_plan->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // ステータスを完了にし、読了年月日に今日の日付を設定
+        $reading_plan->update([
+            'status' => 'completed',
+            'completed_at' => now(),
+        ]);
+
+        return redirect()->route('reading-plans.index')->with('success', '読書計画を完了しました。');
     }
 
     // 読書計画を削除する
@@ -83,6 +107,6 @@ class ReadingPlanController extends Controller
 
         $reading_plan->delete();  // 読書計画を削除
 
-        return redirect()->route('reading_plans.index')->with('success', '読書計画を削除しました。');
+        return redirect()->route('reading-plans.index')->with('success', '読書計画を削除しました。');
     }
 }

@@ -18,7 +18,7 @@ class IndexReadingPlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['nullable', 'string', 'in:進行中,完了,期限切れ'],
+            'status' => ['nullable', 'string', 'in:in_progress,completed,expired'],
         ];
     }
 

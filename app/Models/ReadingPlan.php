@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\ReadingPlanStatus;
 
 class ReadingPlan extends Model
 {
@@ -15,6 +16,12 @@ class ReadingPlan extends Model
         'target_date',
         'status',
         'completed_at',
+    ];
+
+    protected $casts = [
+        'target_date' => 'date',
+        'completed_at' => 'datetime',
+        'status' => ReadingPlanStatus::class,
     ];
 
     // リレーション: 読書計画を登録したユーザー
