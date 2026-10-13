@@ -6,6 +6,7 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReadingPlanController;
+use App\Http\Controllers\ReadingReportController;
 use Illuminate\Support\Facades\Route;
 
 // 書籍関係
@@ -97,12 +98,9 @@ Route::middleware('auth')->group(
         // 書計画削除処理
         Route::delete('/reading-plans/{reading_plan}', [ReadingPlanController::class, 'destroy'])->name('reading-plans.destroy');
 
+        // PG14	マイ読書レポート
+        Route::get('/reports', [ReadingReportController::class, 'index'])->name('reports.index');
 
-
-        // PG14	マイ読書レポート（ダミー）
-        Route::get('/reports', function () {
-            return 'マイ読書レポート（準備中）';
-        })->name('reports.index');
 
         // PG18 通知一覧（ダミー）
         Route::get('/notifications', function () {
