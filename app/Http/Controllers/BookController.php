@@ -8,9 +8,36 @@ use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use App\Models\Genre;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class BookController extends Controller
 {
+    // Google Books API を使った ISBN 検索処理
+    public function searchIsbn($isbn)
+    {
+        $response = Http::get("https://www.googleapis.com/books/v1/volumes", [
+            'q' => $isbn,
+            'key' => config('services.google.books_api_key'),
+        ]);
+
+        if ($response->failed() || empty($response->json('items'))) {
+            return response()->json([
+                'error' => '書籍情報が見つかりませんでした。'
+            ], 404);
+        }
+
+        $volumeInfo = $response->json('items')[0]['volumeInfo'] ?? [];
+
+        return response()->json([
+            'title' => $volumeInfo['title'] ?? '',
+            'author' => isset($volumeInfo['authors']) ? implode(', ', $volumeInfo['authors']) : '',
+            'isbn' => $isbn,
+            'published_date' => $volumeInfo['publishedDate'] ?? null,
+            'description' => $volumeInfo['description'] ?? '',
+            'image_url' => $volumeInfo['imageLinks']['thumbnail'] ?? '',
+        ], 200);
+    }
+
     // PG01 書籍一覧（トップ）
     public function index(IndexBookRequest $request)
     {
