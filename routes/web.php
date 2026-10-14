@@ -7,6 +7,7 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReadingPlanController;
 use App\Http\Controllers\ReadingReportController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 // 書籍関係
@@ -101,10 +102,8 @@ Route::middleware('auth')->group(
         // PG14	マイ読書レポート
         Route::get('/reports', [ReadingReportController::class, 'index'])->name('reports.index');
 
-
-        // PG18 通知一覧（ダミー）
-        Route::get('/notifications', function () {
-            return '通知一覧（準備中）';
-        })->name('notifications.index');
+        // PG18 通知一覧
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/{id}/read', [NotificationController::class, 'update'])->name('notifications.read');
     }
 );
