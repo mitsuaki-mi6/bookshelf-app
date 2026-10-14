@@ -74,7 +74,7 @@ class ReadingReportController extends Controller
             'genre_ratings' => $genreRatings,
         ];
 
-        // ★ ここにビューを返す処理を追加
+        // 画面表示ビューを返す処理
         return view('reports.index', compact('stats'));
     }
 }
