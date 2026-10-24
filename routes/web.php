@@ -3,11 +3,11 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RankingController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReadingPlanController;
 use App\Http\Controllers\ReadingReportController;
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 // 書籍関係
@@ -81,7 +81,6 @@ Route::middleware('auth')->group(
 
         // ジャンル削除
         Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
-
 
         // 読書計画関係
         // PG15 読書計画一覧

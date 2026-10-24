@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

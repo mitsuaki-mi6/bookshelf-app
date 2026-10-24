@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\ReadingPlan;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ReadingPlanUpdateFeatureTest extends TestCase
@@ -25,14 +25,14 @@ class ReadingPlanUpdateFeatureTest extends TestCase
             'user_id' => $user->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act
         $response = $this->actingAs($user)->put("/reading-plans/{$readingPlan->id}", [
             'user_id' => $user->id,
             'book_id' => $book->id,
-            'target_date' =>  now()->addDays(10)->toDateString(),
+            'target_date' => now()->addDays(10)->toDateString(),
         ]);
 
         // Assert
@@ -59,14 +59,14 @@ class ReadingPlanUpdateFeatureTest extends TestCase
             'user_id' => $user->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act
         // 未認証でリクエスト
         $response = $this->put("/reading-plans/{$readingPlan->id}", [
             'book_id' => $book->id,
-            'target_date' =>  now()->addDays(10)->toDateString(),
+            'target_date' => now()->addDays(10)->toDateString(),
         ]);
 
         // Assert
@@ -90,7 +90,7 @@ class ReadingPlanUpdateFeatureTest extends TestCase
             'user_id' => $otheruser->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act

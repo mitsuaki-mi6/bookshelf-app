@@ -57,7 +57,7 @@ class BookUpdateApiTest extends TestCase
             'title' => '変更書籍',
             'author' => '変更著者',
             'isbn' => '1234567890456',
-            'published_date' => '2020-05-07',
+            'published_date' => '2020-05-07 00:00:00',  // 20261024 修正  MN
             'description' => '変更説明',
             'image_url' => 'https://example.com/image_change.jpg',
         ]);
@@ -114,7 +114,7 @@ class BookUpdateApiTest extends TestCase
             'title' => '変更書籍',
             'author' => '変更著者',
             'isbn' => '1234567890123',
-            'published_date' => '2020-05-07',
+            'published_date' => '2020-05-07 00:00:00',  // 20261024 修正  MN
             'description' => '変更説明',
             'image_url' => 'https://example.com/image_change.jpg',
         ]);
@@ -222,7 +222,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // 256文字以上の有効なURLを作成
-        $longUrl = 'https://example.com/'.str_repeat('a', 240);
+        $longUrl = 'https://example.com/' . str_repeat('a', 240);
 
         // Act  編集データ（文字数オーパ）
         $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [

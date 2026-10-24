@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Book;
 use App\Models\Genre;
 use App\Models\Review;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ReadingReportFeatureTest extends TestCase
@@ -80,7 +80,7 @@ class ReadingReportFeatureTest extends TestCase
         $response->assertViewHas('stats', function ($stats) {
             return $stats['summary']['total_reviews'] === 4  // 総レビュー数は自分のレビュー4件のみ
                 && $stats['summary']['books_read'] === 3  // 読了冊数は自分のレビューがある書籍3冊のみ
-                && (float)$stats['summary']['average_rating'] === 4.0; // 平均評価は(5+4+3+4)/4 = 4.0
+                && (float) $stats['summary']['average_rating'] === 4.0; // 平均評価は(5+4+3+4)/4 = 4.0
 
         });
     }
@@ -122,7 +122,7 @@ class ReadingReportFeatureTest extends TestCase
     }
 
     /** @test */
-    public function 高評価書籍TOP5が正しく表示されること（表示5未満）()
+    public function 高評価書籍_to_p5が正しく表示されること（表示5未満）()
     {
         // Arrange
         // 認証済みユーザーを作成
@@ -151,7 +151,7 @@ class ReadingReportFeatureTest extends TestCase
     }
 
     /** @test */
-    public function 高評価書籍TOP5が正しく表示されること（4以上6件）()
+    public function 高評価書籍_to_p5が正しく表示されること（4以上6件）()
     {
         // Arrange
         // 認証済みユーザーを作成
@@ -184,7 +184,7 @@ class ReadingReportFeatureTest extends TestCase
     }
 
     /** @test */
-    public function 高評価書籍TOP5に評価4以上が0件の確認()
+    public function 高評価書籍_to_p5に評価4以上が0件の確認()
     {
         // Arrange
         // 認証済みユーザーを作成
@@ -205,7 +205,7 @@ class ReadingReportFeatureTest extends TestCase
     }
 
     /** @test */
-    public function ジャンル別評価傾向TOP5が正しく表示されること()
+    public function ジャンル別評価傾向_to_p5が正しく表示されること()
     {
         // Arrange
         // 認証済みユーザーを作成
@@ -280,7 +280,7 @@ class ReadingReportFeatureTest extends TestCase
     }
 
     /** @test */
-    public function ジャンル６件平均評価TOP5の確認()
+    public function ジャンル６件平均評価_to_p5の確認()
     {
         // Arrange
         // 認証済みユーザーを作成
@@ -404,7 +404,7 @@ class ReadingReportFeatureTest extends TestCase
     }
 
     /** @test */
-    public function 高評価書籍TOP5書籍リンククリック時に正常に遷移する時()
+    public function 高評価書籍_to_p5書籍リンククリック時に正常に遷移する時()
     {
         // Arrange
         // 認証済みユーザーを作成
@@ -435,7 +435,7 @@ class ReadingReportFeatureTest extends TestCase
     }
 
     /** @test */
-    public function ジャンル別評価傾向TOP5のジャンルリンククリック時に正常に遷移する()
+    public function ジャンル別評価傾向_to_p5のジャンルリンククリック時に正常に遷移する()
     {
         // Arrange
         // 認証済みユーザーを作成

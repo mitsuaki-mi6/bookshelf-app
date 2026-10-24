@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\ReadingPlan;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ReadingPlanEditAuthFeatureTest extends TestCase
@@ -29,13 +29,13 @@ class ReadingPlanEditAuthFeatureTest extends TestCase
             'user_id' => $user->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act
         $response = $this->actingAs($user)->get("/reading-plans/{$readingPlan->id}/edit");
 
-        /// Assert
+        // / Assert
         // 読書計画編集画面が正常に表示される
         $response->assertStatus(200);
         $response->assertSee('対象書籍');
@@ -58,10 +58,10 @@ class ReadingPlanEditAuthFeatureTest extends TestCase
         // 未認証でリクエスト
         $response = $this->get("/reading-plans/{$readingPlan->id}/edit");
 
-        /// Assert
+        // / Assert
         // ログイン画面へリダイレクトされること
         $response->assertStatus(302);
-        $response->assertRedirect('/login');;
+        $response->assertRedirect('/login');
     }
 
     /** @test */
@@ -79,7 +79,7 @@ class ReadingPlanEditAuthFeatureTest extends TestCase
             'user_id' => $otheruser->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act

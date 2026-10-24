@@ -2,12 +2,12 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Models\Book;
-use App\Models\User;
-use App\Models\ReadingPlan;
 use App\Enums\ReadingPlanStatus;
+use App\Models\Book;
+use App\Models\ReadingPlan;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReadingPlanModelTest extends TestCase
 {
@@ -58,7 +58,7 @@ class ReadingPlanModelTest extends TestCase
     }
 
     /** @test */
-    public function statusがReadingPlanStatusにキャストされ値が一致すること()
+    public function statusが_reading_plan_statusにキャストされ値が一致すること()
     {
         // Enumキャストの検証
         $reading_plan = ReadingPlan::factory()->create([

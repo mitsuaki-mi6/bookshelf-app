@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\ReadingPlan;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ReadingPlanDestroyFeatureTest extends TestCase
@@ -25,13 +25,13 @@ class ReadingPlanDestroyFeatureTest extends TestCase
             'user_id' => $user->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act
         $response = $this->actingAs($user)->delete("/reading-plans/{$readingPlan->id}");
 
-        /// Assert
+        // / Assert
         $response->assertStatus(302);
         $response->assertRedirect('/reading-plans'); // リダイレクト先の確認
 
@@ -54,14 +54,14 @@ class ReadingPlanDestroyFeatureTest extends TestCase
             'user_id' => $user->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act
         // 未認証でリクエスト
         $response = $this->delete("/reading-plans/{$readingPlan->id}");
 
-        /// Assert
+        // / Assert
         // ログイン画面へリダイレクトされること
         $response->assertStatus(302);
         $response->assertRedirect('/login');
@@ -82,7 +82,7 @@ class ReadingPlanDestroyFeatureTest extends TestCase
             'user_id' => $otheruser->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act

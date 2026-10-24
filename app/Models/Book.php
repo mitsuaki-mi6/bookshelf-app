@@ -19,6 +19,7 @@ class Book extends Model
         'description',
         'image_url',
     ];
+
     // 追加：型設定　　2026/10/10　MN
     protected $casts = [
         'published_date' => 'date',

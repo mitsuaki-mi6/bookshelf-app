@@ -57,7 +57,7 @@ class BookIndexSearchValidationTest extends TestCase
     }
 
     /** @test */
-    public function ジャンルIDが数字以外を拒否する()
+    public function ジャンル_i_dが数字以外を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -77,7 +77,7 @@ class BookIndexSearchValidationTest extends TestCase
     }
 
     /** @test */
-    public function ジャンルIDが存在しない場合を拒否する()
+    public function ジャンル_i_dが存在しない場合を拒否する()
     {
         // Arrange
         // バリデーションルールの取得

@@ -94,7 +94,7 @@ class BookCrudTest extends TestCase
             'title' => '更新書籍',
             'author' => '更新著者',
             'isbn' => '0123456789012',
-            'published_date' => '2000-05-07',
+            'published_date' => '2000-05-07 00:00:00',  // 20261024 修正　MN
             'description' => '更新説明',
             'image_url' => 'https://example.com/image002.jpg',
         ]);

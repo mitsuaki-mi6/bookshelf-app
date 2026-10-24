@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Book;
 use App\Models\ReadingPlan;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ReadingPlanCompleteFeatureTest extends TestCase
@@ -25,17 +25,17 @@ class ReadingPlanCompleteFeatureTest extends TestCase
             'user_id' => $user->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act
         $response = $this->actingAs($user)->post("/reading-plans/{$readingPlan->id}/complete");
 
-        /// Assert
+        // / Assert
         $response->assertStatus(302);
         $response->assertRedirect('/reading-plans'); // リダイレクト先の確認
 
-        /// 読書計画が完了に変更されていることを確認
+        // / 読書計画が完了に変更されていることを確認
         $this->assertDatabaseHas('reading_plans', [
             'id' => $readingPlan->id,
             'status' => 'completed', // ステータスが完了になっていること
@@ -58,14 +58,14 @@ class ReadingPlanCompleteFeatureTest extends TestCase
             'user_id' => $user->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act
         // 未認証でリクエスト
         $response = $this->post("/reading-plans/{$readingPlan->id}/complete");
 
-        /// Assert
+        // / Assert
         // ログイン画面へリダイレクトされること
         $response->assertStatus(302);
         $response->assertRedirect('/login');
@@ -86,7 +86,7 @@ class ReadingPlanCompleteFeatureTest extends TestCase
             'user_id' => $otheruser->id,
             'book_id' => $book->id,
             'status' => 'in_progress',
-            'target_date' =>  now()->addDays(5)->toDateString(),
+            'target_date' => now()->addDays(5)->toDateString(),
         ]);
 
         // Act

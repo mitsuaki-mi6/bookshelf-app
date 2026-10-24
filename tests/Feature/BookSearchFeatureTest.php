@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Book;
 use App\Models\Genre;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BookSearchFeatureTest extends TestCase
@@ -44,7 +44,7 @@ class BookSearchFeatureTest extends TestCase
 
         // Act
         // 検索条件でアクセス
-        $response = $this->actingAs($user)->get('/books?keyword=検索&genre=' . $genre1->id);
+        $response = $this->actingAs($user)->get('/books?keyword=検索&genre='.$genre1->id);
 
         // Assert
         // ヒットデータが表示される
@@ -80,8 +80,7 @@ class BookSearchFeatureTest extends TestCase
         $noHitBook->genres()->attach([$genre2->id]);
 
         // Act (1ページ目)
-        $response = $this->actingAs($user)->get('/books?genre=' . $genre1->id);
-
+        $response = $this->actingAs($user)->get('/books?genre='.$genre1->id);
 
         // Assert (1ページ目)
         $response->assertStatus(200);
@@ -98,7 +97,7 @@ class BookSearchFeatureTest extends TestCase
         });
 
         // Act (2ページ目)
-        $responsePage2 = $this->actingAs($user)->get('/books?genre=' . $genre1->id . '&page=2');
+        $responsePage2 = $this->actingAs($user)->get('/books?genre='.$genre1->id.'&page=2');
 
         // Assert (2ページ目)
         $responsePage2->assertStatus(200);
@@ -127,7 +126,7 @@ class BookSearchFeatureTest extends TestCase
         }
 
         // Act
-        $response = $this->actingAs($user)->get('/books?genre=' . $genre2->id);
+        $response = $this->actingAs($user)->get('/books?genre='.$genre2->id);
 
         // Assert
         $response->assertStatus(200);
@@ -157,12 +156,12 @@ class BookSearchFeatureTest extends TestCase
 
         // Act
         // 2ページ目に検索パラメータ付きでアクセス
-        $response = $this->actingAs($user)->get('/books?keyword=TEST&genre=' . $genre->id . '&page=2');
+        $response = $this->actingAs($user)->get('/books?keyword=TEST&genre='.$genre->id.'&page=2');
 
         // Assert
         $response->assertStatus(200);
         // ページネーションのリンクやフォームにパラメータ（keywordやgenre）が保持されていること
         $response->assertSee('keyword=TEST');
-        $response->assertSee('genre=' . $genre->id);
+        $response->assertSee('genre='.$genre->id);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Notifications\Notification as BaseNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Notifications\Notification as BaseNotification;
+use Tests\TestCase;
 
 class NotificationModelTest extends TestCase
 {
@@ -19,7 +19,8 @@ class NotificationModelTest extends TestCase
 
         // ユーザー通知を3件作成（Laravelが自動でDBに保存）
         for ($i = 1; $i <= 3; $i++) {
-            $user->notify(new class extends BaseNotification {
+            $user->notify(new class extends BaseNotification
+            {
                 public function via($notifiable)
                 {
                     return ['database'];

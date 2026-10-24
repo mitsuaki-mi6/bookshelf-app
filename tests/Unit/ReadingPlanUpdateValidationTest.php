@@ -13,7 +13,7 @@ class ReadingPlanUpdateValidationTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function 正常な書籍ID、期日が今日以降の場合正常に動作すること()
+    public function 正常な書籍_i_d、期日が今日以降の場合正常に動作すること()
     {
         // Arrange
         // 書籍と読書計画のセット

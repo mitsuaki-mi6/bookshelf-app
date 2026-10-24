@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
 use App\Models\Book;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ReadingPlanStoreFeatureTest extends TestCase
@@ -26,7 +26,7 @@ class ReadingPlanStoreFeatureTest extends TestCase
             'target_date' => now()->addDays(7)->toDateString(), // 目標期日
         ]);
 
-        /// Assert
+        // / Assert
         $response->assertStatus(302);
         $response->assertRedirect('/reading-plans'); // リダイレクト先の確認
 
@@ -49,7 +49,7 @@ class ReadingPlanStoreFeatureTest extends TestCase
             'target_date' => now()->addDays(7)->toDateString(),
         ]);
 
-        /// Assert
+        // / Assert
         // ログイン画面へリダイレクトされること
         $response->assertStatus(302);
         $response->assertRedirect('/login');

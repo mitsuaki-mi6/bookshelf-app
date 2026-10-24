@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
-use App\Models\Notification;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class NotificationIndexFeatureTest extends TestCase
@@ -19,7 +19,7 @@ class NotificationIndexFeatureTest extends TestCase
         $user = User::factory()->create();
         // 通知テーブルデータ作成
         $user->notifications()->create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\Notifications\PlanReminderNotification',
             'notifiable_type' => get_class($user),
             'notifiable_id' => $user->id,
@@ -32,7 +32,7 @@ class NotificationIndexFeatureTest extends TestCase
         ]);
 
         // Act
-        $response = $this->actingAs($user)->get("/notifications");
+        $response = $this->actingAs($user)->get('/notifications');
 
         // Assert: 通知一覧が表示される_未読分
         $response->assertStatus(200);
@@ -49,7 +49,7 @@ class NotificationIndexFeatureTest extends TestCase
         $user = User::factory()->create();
         // 通知テーブルデータ作成
         $user->notifications()->create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\Notifications\PlanReminderNotification',
             'notifiable_type' => get_class($user),
             'notifiable_id' => $user->id,
@@ -62,7 +62,7 @@ class NotificationIndexFeatureTest extends TestCase
         ]);
 
         // Act
-        $response = $this->actingAs($user)->get("/notifications");
+        $response = $this->actingAs($user)->get('/notifications');
 
         // Assert: 通知一覧が表示される_既読分
         $response->assertStatus(200);
@@ -78,7 +78,7 @@ class NotificationIndexFeatureTest extends TestCase
         $user = User::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->get("/notifications");
+        $response = $this->actingAs($user)->get('/notifications');
 
         // Assert: 通知一覧が表示される_既読分
         $response->assertStatus(200);
@@ -93,7 +93,7 @@ class NotificationIndexFeatureTest extends TestCase
         $user = User::factory()->create();
         // 通知テーブルデータ作成
         $user->notifications()->create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\Notifications\PlanReminderNotification',
             'notifiable_type' => get_class($user),
             'notifiable_id' => $user->id,
@@ -106,7 +106,7 @@ class NotificationIndexFeatureTest extends TestCase
         ]);
 
         // Act
-        $response = $this->get("/notifications");
+        $response = $this->get('/notifications');
 
         // Assert
         // ログイン画面へリダイレクトされること
@@ -122,7 +122,7 @@ class NotificationIndexFeatureTest extends TestCase
         $user = User::factory()->create();
         // 通知テーブルデータ作成
         $notification = $user->notifications()->create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\Notifications\PlanReminderNotification',
             'notifiable_type' => get_class($user),
             'notifiable_id' => $user->id,
@@ -155,7 +155,7 @@ class NotificationIndexFeatureTest extends TestCase
         $otheruser = User::factory()->create();  // 他人
         // 通知テーブルデータ作成(他人)
         $notification = $otheruser->notifications()->create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\Notifications\PlanReminderNotification',
             'notifiable_type' => get_class($otheruser),
             'notifiable_id' => $otheruser->id,

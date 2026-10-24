@@ -7,13 +7,12 @@ use App\Models\Book;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-
 class ReadingPlanValidationTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function 正常な書籍ID、期日が今日以降の場合正常に動作すること()
+    public function 正常な書籍_i_d、期日が今日以降の場合正常に動作すること()
     {
         // Arrange
         // 書籍のセット
@@ -59,7 +58,7 @@ class ReadingPlanValidationTest extends TestCase
     }
 
     /** @test */
-    public function 書籍IDが数値以外を拒否する()
+    public function 書籍_i_dが数値以外を拒否する()
     {
         // Arrange
         // 書籍のセット

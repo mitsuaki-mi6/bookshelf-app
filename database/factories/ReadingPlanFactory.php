@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Book;
 use App\Models\User;
-use App\Models\ReadingPlan;
-
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReadingPlanFactory extends Factory
