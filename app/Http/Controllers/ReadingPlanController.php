@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Enums\ReadingPlanStatus;
 use App\Http\Requests\IndexReadingPlanRequest;
 use App\Http\Requests\StoreReadingPlanRequest;
 use App\Http\Requests\UpdateReadingPlanRequest;
+use App\Models\Book;
 use App\Models\ReadingPlan;
 
 class ReadingPlanController extends Controller
 {
-
     // PG15 読書計画一覧
     public function index(IndexReadingPlanRequest $request)
     {
@@ -23,6 +23,7 @@ class ReadingPlanController extends Controller
                 return $query->where('status', $status);
             })
             ->get();
+
         // 変数名をBlade側が求めている $currentStatus に合わせる
         return view('reading-plans.index', compact('readingPlans'))->with('currentStatus', $status);
     }
@@ -31,7 +32,7 @@ class ReadingPlanController extends Controller
     // PG16 読書計画作成画面表示
     public function create()
     {
-        $books = \App\Models\Book::all();
+        $books = Book::all();
 
         return view('reading-plans.create', compact('books'));
     }
@@ -42,7 +43,7 @@ class ReadingPlanController extends Controller
         $data = $request->validated();
 
         // 新規作成時は「進行中 (in_progress)」をデフォルト設定する
-        $data['status'] = \App\Enums\ReadingPlanStatus::IN_PROGRESS->value;
+        $data['status'] = ReadingPlanStatus::IN_PROGRESS->value;
 
         // ログイン中のユーザーIDを動的に設定する
         $data['user_id'] = auth()->id();

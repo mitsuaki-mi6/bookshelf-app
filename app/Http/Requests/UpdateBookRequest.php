@@ -22,7 +22,7 @@ class UpdateBookRequest extends FormRequest
             'genres.*' => ['integer', 'exists:genres,id'],
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
-            'isbn' => ['nullable', 'string', 'digits:13', 'unique:books,isbn,' . $this->route('book')->id], // required → nullableに変更　2026/10/10 MN
+            'isbn' => ['nullable', 'string', 'digits:13', 'unique:books,isbn,'.$this->route('book')->id], // required → nullableに変更　2026/10/10 MN
             'published_date' => ['nullable', 'date', 'max:10'], // required → nullableに変更　2026/10/10 MN
             'description' => ['nullable', 'string', 'max:255'],
             'image_url' => ['nullable', 'url', 'max:255'],

@@ -15,14 +15,42 @@ class BookController extends Controller
     // Google Books API を使った ISBN 検索処理
     public function searchIsbn($isbn)
     {
-        $response = Http::get("https://www.googleapis.com/books/v1/volumes", [
-            'q' => $isbn,
-            'key' => config('services.google.books_api_key'),
-        ]);
-
-        if ($response->failed() || empty($response->json('items'))) {
+        // 13桁の数字かどうかチェック (13桁以外 -> 400)
+        if (!preg_match('/^\d{13}$/', $isbn)) {
             return response()->json([
-                'error' => '書籍情報が見つかりませんでした。'
+                'error' => 'ISBNは13桁で入力してください。',
+            ], 400);
+        }
+        try {
+            $response = Http::get('https://www.googleapis.com/books/v1/volumes', [
+                'q' => $isbn,
+                'key' => config('services.google.books_api_key'),
+            ]);
+        } catch (\Exception $e) {
+            // API通信エラー -> 500
+            return response()->json([
+                'error' => 'API通信エラーが発生しました。',
+            ], 500);
+        }
+
+        // Google Books API のクォータ超過 -> 429
+        if ($response->status() === 429) {
+            return response()->json([
+                'error' => 'Google Books API のクォータを超過しました。.env に GOOGLE_BOOKS_API_KEY を設定してください。',
+            ], 429);
+        }
+
+        // その他のAPI通信エラー -> 500
+        if ($response->failed()) {
+            return response()->json([
+                'error' => 'API通信エラーが発生しました。',
+            ], 500);
+        }
+
+        // 書籍が見つからない -> 404 （ここをスッキリ修正！）
+        if (empty($response->json('items'))) {
+            return response()->json([
+                'error' => '書籍が見つかりませんでした。',
             ], 404);
         }
 
@@ -190,3 +218,4 @@ class BookController extends Controller
         return redirect()->route('books.index')->with('success', '書籍を更新しました。');
     }
 }
+

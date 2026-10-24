@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
 class PlanReminderNotification extends Notification
@@ -11,6 +10,7 @@ class PlanReminderNotification extends Notification
     use Queueable;
 
     protected $plan;
+
     protected $type;
 
     /**
@@ -59,7 +59,7 @@ class PlanReminderNotification extends Notification
             'three_days_before' => "書籍「{$this->plan->book->title}」の読書計画の期日が3日後に迫っています。",
             'today' => "書籍「{$this->plan->book->title}」の読書計画の期日は本日です。",
             'three_days_after' => "書籍「{$this->plan->book->title}」の読書計画の期日から3日が経過しました（期限切れ）。",
-            default => "読書計画を確認してください。",
+            default => '読書計画を確認してください。',
         };
 
         return [

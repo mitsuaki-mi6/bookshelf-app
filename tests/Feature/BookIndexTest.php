@@ -97,7 +97,7 @@ class BookIndexTest extends TestCase
         $response->assertViewHas('books', function ($books) {
             return $books->count() === 0; // 1ページあたりの表示件数が0件であること
         });
-        $response->assertSee('書籍が登録されていません。'); // 0件時のメッセージが表示されていること
+        $response->assertSee('書籍が見つかりませんでした。'); // 0件時のメッセージが表示されていること  20261024 修正 MN
     }
 
     /** @test */

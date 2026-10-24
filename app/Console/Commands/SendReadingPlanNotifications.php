@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\ReadingPlan;
 use App\Notifications\PlanReminderNotification;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class SendReadingPlanNotifications extends Command
 {

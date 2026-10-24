@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Review;
 use App\Models\Genre;
+use App\Models\Review;
+use Illuminate\Support\Facades\Auth;
 
 class ReadingReportController extends Controller
 {
@@ -21,6 +20,7 @@ class ReadingReportController extends Controller
         // 2. 評価分布（1〜5の各件数）
         $ratingDistribution = collect([1, 2, 3, 4, 5])->mapWithKeys(function ($star) use ($user) {
             $count = Review::where('user_id', $user->id)->where('rating', $star)->count();
+
             return [$star - 1 => $count];
         });
 

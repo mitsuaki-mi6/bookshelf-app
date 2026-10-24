@@ -54,7 +54,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function isb_nのが自分と同じ値は正常に動作する()
+    public function isbnのが自分と同じ値は正常に動作する()
     {
         // Arrange
         $user = User::factory()->create();
@@ -112,8 +112,8 @@ class BookUpdateValidationTest extends TestCase
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('title', $validator->errors()->toArray());
         $this->assertArrayHasKey('author', $validator->errors()->toArray());
-        $this->assertArrayHasKey('isbn', $validator->errors()->toArray());
-        $this->assertArrayHasKey('published_date', $validator->errors()->toArray());
+        // $this->assertArrayHasKey('isbn', $validator->errors()->toArray());  仕様変更削除　20261017 MN
+        // $this->assertArrayHasKey('published_date', $validator->errors()->toArray());  仕様変更削除　20261017 MN
         $this->assertArrayHasKey('genres', $validator->errors()->toArray());
     }
 
@@ -166,7 +166,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function isb_nが数字以外を拒否する()
+    public function isbnが数字以外を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -190,7 +190,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function isb_nが13桁未満数字を拒否する()
+    public function isbnが13桁未満数字を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -214,7 +214,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function isb_nが14桁数字を拒否する()
+    public function isbnが14桁数字を拒否する()
     {
         // Arrange
         // バリデーションルールの取得
@@ -238,7 +238,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function isb_nの重複を拒否する_自分以外()
+    public function isbnの重複を拒否する_自分以外()
     {
         // Arrange
         $user = User::factory()->create();
@@ -344,7 +344,7 @@ class BookUpdateValidationTest extends TestCase
     }
 
     /** @test */
-    public function 画像_ur_lの_ur_l形式以外を拒否する()
+    public function 画像_urlの_url形式以外を拒否する()
     {
         // Arrange
         // バリデーションルールの取得

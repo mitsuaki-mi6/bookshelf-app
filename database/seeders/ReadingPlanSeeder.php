@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Book;
+use App\Enums\ReadingPlanStatus;
 use App\Models\ReadingPlan;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use App\Enums\ReadingPlanStatus;
 
 class ReadingPlanSeeder extends Seeder
 {
@@ -49,7 +47,7 @@ class ReadingPlanSeeder extends Seeder
             'user_id' => 1,
             'book_id' => 5,
             'target_date' => Carbon::today()->subDays(10),
-            'status' => ReadingPlanStatus::COMPLETED->value,
+            'status' => ReadingPlanStatus::Completed->value,
             'completed_at' => Carbon::today()->subDays(5),
         ]);
 

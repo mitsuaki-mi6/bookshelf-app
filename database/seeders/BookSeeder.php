@@ -112,7 +112,7 @@ class BookSeeder extends Seeder
             unset($bookData['genres']);
 
             $bookData['user_id'] = $users->random()->id; // 各書籍ごとにランダムなユーザーを割り当てる
-            $bookData['image_url'] = 'https://placehold.co/200x300/e2e8f0/475569?text=' . ($index + 1);
+            $bookData['image_url'] = 'https://placehold.co/200x300/e2e8f0/475569?text='.($index + 1);
 
             $book = Book::firstOrCreate(
                 ['isbn' => $bookData['isbn']],
