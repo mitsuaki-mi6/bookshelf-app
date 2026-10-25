@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -50,6 +51,15 @@ class Handler extends ExceptionHandler
                     'message' => '入力内容に誤りがあります。',
                     'errors' => $e->errors(),
                 ], 422);
+            }
+        });
+
+        // APIのリクエストで未認証の場合（401）
+        $this->renderable(function (AuthenticationException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => '認証されていません。',
+                ], 401);
             }
         });
     }

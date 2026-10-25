@@ -113,7 +113,9 @@ class BookController extends Controller
 
         // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
         if ($book->user_id !== Auth::id()) {
-            abort(403);
+            return response()->json([
+                'message' => 'この操作は許可されていません。',
+            ], 403);
         }
 
         // バリデーション済みのデータを変数に受ける
@@ -145,7 +147,9 @@ class BookController extends Controller
 
         // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
         if ($book->user_id !== Auth::id()) {
-            abort(403);
+            return response()->json([
+                'message' => 'この操作は許可されていません。',
+            ], 403);
         }
 
         // 中間テーブル（book_genre）の削除
