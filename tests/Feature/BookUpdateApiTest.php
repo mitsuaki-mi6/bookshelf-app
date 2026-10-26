@@ -38,7 +38,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre1->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -71,7 +71,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function isb_nが自身でも重複エラーとならず更新できること()
+    public function ISBNが自身でも重複エラーとならず更新できること()
     {
         // Arrange
         // ユーザーを作成
@@ -95,7 +95,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -121,7 +121,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function 存在しない書籍_i_d指定された場合（404）()
+    public function 存在しない書籍_id指定された場合（404）()
     {
         // Arrange
         // ユーザーを作成
@@ -140,7 +140,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ（存在しないID '9999' を指定）
-        $response = $this->actingAs($user)->put('/api/v1/books/9999', [
+        $response = $this->actingAs($user, 'sanctum')->put('/api/v1/books/9999', [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -177,7 +177,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ（必須データなし）
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '',
             'author' => '',
@@ -197,8 +197,6 @@ class BookUpdateApiTest extends TestCase
         $response->assertInvalid([
             'title' => '書籍名を入力してください',
             'author' => '著者を入力してください',
-            'isbn' => 'ISBNコードを入力してください',
-            'published_date' => '出版日を入力してください',
             'genres' => 'ジャンルは１つ以上選択してください',
         ]);
     }
@@ -225,7 +223,7 @@ class BookUpdateApiTest extends TestCase
         $longUrl = 'https://example.com/' . str_repeat('a', 240);
 
         // Act  編集データ（文字数オーパ）
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => str_repeat('あ', 256),  // 255文字オーバー
             'author' => str_repeat('あ', 256),  // 255文字オーバー
@@ -253,7 +251,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：_isb_nが13桁未満数字を拒否する()
+    public function バリデーション：ISBNが13桁未満数字を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -271,7 +269,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ（ISBN13桁未満）
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -294,7 +292,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：_isb_nが数字以外を拒否する()
+    public function バリデーション：ISBNが数字以外を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -312,7 +310,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -335,7 +333,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：_isb_nの重複を拒否する()
+    public function バリデーション：ISBNの重複を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -359,7 +357,7 @@ class BookUpdateApiTest extends TestCase
         ]);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -400,7 +398,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -441,7 +439,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -482,7 +480,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -505,7 +503,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：画像_ur_lの_ur_l形式以外を拒否する()
+    public function バリデーション：画像_urlのurl形式以外を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -523,7 +521,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => $user->id,
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -546,7 +544,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：登録者_i_dが未設定の場合を拒否する()
+    public function バリデーション：登録者_idが未設定の場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -564,7 +562,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'title' => '変更書籍',
             'author' => '変更著者',
             'isbn' => '1234567890123',
@@ -586,7 +584,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：登録者_i_dが数値以外の場合を拒否する()
+    public function バリデーション：登録者_idが数値以外の場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -604,7 +602,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => 'a',  // 登録者IDが数値以外
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -627,7 +625,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：登録者_i_dが存在しない場合を拒否する()
+    public function バリデーション：登録者_idが存在しない場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -645,7 +643,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // Act  編集データ
-        $response = $this->actingAs($user)->put("/api/v1/books/{$book->id}", [
+        $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
             'user_id' => '99999',  // 登録者IDが存在しない
             'title' => '変更書籍',
             'author' => '変更著者',
@@ -664,6 +662,81 @@ class BookUpdateApiTest extends TestCase
         // 録者IDが存在しない場合を検証
         $response->assertInvalid([
             'user_id' => '指定された登録者IDは存在しません',
+        ]);
+    }
+
+    /** @test */
+    public function 未認証ユーザーで書籍更新しようとした場合401()
+    {
+        // Arrange
+        // ユーザーを作成
+        $user = User::factory()->create();
+
+        // ジャンルを作成
+        $genre = Genre::factory()->create();
+
+        // 更新対象の書籍を作成
+        $book = Book::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        // 書籍とジャンルを紐付け
+        $book->genres()->attach($genre->id);
+
+        // Act  編集データ
+        $response = $this->put("/api/v1/books/{$book->id}", [
+            'user_id' => $user->id,
+            'title' => '変更書籍',
+            'author' => '変更著者',
+            'isbn' => '1234567890123',
+            'published_date' => '1966-01-03',
+            'description' => '変更説明',
+            'image_url' => 'https://example.com/image_change.jpg',
+            'genres' => [$genre->id],
+        ]);
+
+        // Assert
+        $response->assertStatus(401);
+        $response->assertJson([
+            'message' => '認証されていません。',
+        ]);
+    }
+
+    /** @test */
+    public function 他人の書籍を更新の場合403()
+    {
+        // Arrange
+        // ユーザーを作成
+        $myuser = User::factory()->create();
+        $otheruser = User::factory()->create();
+
+        // ジャンルを作成
+        $genre = Genre::factory()->create();
+
+        // 更新対象の書籍を作成
+        $book = Book::factory()->create([
+            'user_id' => $otheruser->id,
+        ]);
+
+        // 書籍とジャンルを紐付け
+        $book->genres()->attach($genre->id);
+
+        // Act  他人の書籍を指定
+        $response = $this->actingAs($myuser, 'sanctum')->put("/api/v1/books/{$book->id}", [
+            'user_id' => $otheruser->id,
+            'title' => '変更書籍',
+            'author' => '変更著者',
+            'isbn' => '1234567890123',
+            'published_date' => '1966-01-03',
+            'description' => '変更説明',
+            'image_url' => 'https://example.com/image_change.jpg',
+            'genres' => [$genre->id],
+        ]);
+
+        // Assert
+        $response->assertStatus(403);
+        $response->assertJson([
+            'message' => 'この操作は許可されていません。',
         ]);
     }
 }

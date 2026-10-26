@@ -7,11 +7,17 @@ use App\Http\Requests\Api\V1\IndexBookRequest;
 use App\Http\Requests\Api\V1\StoreBookRequest;
 use App\Http\Requests\Api\V1\UpdateBookRequest;
 use App\Http\Resources\Api\V1\BookResource;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Book;
 
 class BookController extends Controller
 {
-    // 書籍一覧を取得する(GET /api/v1/books)
+    /**
+     * 書籍一覧を取得する (GET /api/v1/books)
+     *
+     * @param IndexBookRequest $request 検索キーワードやジャンルIDを含むリクエスト
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\JsonResponse 書籍一覧リソースコレクション（0件の場合はメッセージを返却）
+     */
     public function index(IndexBookRequest $request)
     {
         // クエリのベースを作成しリレーションを事前ロード
@@ -50,8 +56,13 @@ class BookController extends Controller
         return BookResource::collection($books);
     }
 
-    // 書籍詳細を取得する(GET /api/v1/books/{book})
-    public function show($id)
+    /**
+     * 書籍詳細を取得する (GET /api/v1/books/{book})
+     *
+     * @param int $id 書籍ID
+     * @return BookResource 指定された書籍の詳細リソース
+     */
+    public function show(int $id)
     {
         // 書籍詳細で必要なリレーションを事前ロード
         $book = Book::with(['genres', 'reviews.user'])->findOrFail($id);
@@ -60,11 +71,19 @@ class BookController extends Controller
         return new BookResource($book);
     }
 
-    // 書籍を新規登録する(POST /api/v1/books)
+    /**
+     * 書籍を新規登録する (POST /api/v1/books)
+     *
+     * @param StoreBookRequest $request バリデーション済みの登録データリクエスト
+     * @return \Illuminate\Http\JsonResponse 登録成功メッセージと作成された書籍データ（ステータスコード 201）
+     */
     public function store(StoreBookRequest $request)
     {
         // バリデーション済みのデータを取得
         $data = $request->validated();
+
+        // ログイン中のユーザーIDを動的に設定する
+        $data['user_id'] = Auth::id();
 
         $genreIds = $data['genres'] ?? []; // ジャンルが未選択の場合の安全対策
         unset($data['genres']); // booksテーブルに存在しないカラムなので削除
@@ -81,10 +100,23 @@ class BookController extends Controller
         ], 201);
     }
 
-    // 書籍を更新する(PUT /api/v1/books/{book})
-    public function update(UpdateBookRequest $request, $id)
+    /**
+     * 書籍を更新する (PUT /api/v1/books/{book})
+     *
+     * @param UpdateBookRequest $request バリデーション済みの更新データリクエスト
+     * @param int $id 書籍ID
+     * @return BookResource 更新された書籍データリソース
+     */
+    public function update(UpdateBookRequest $request, int $id)
     {
         $book = Book::findOrFail($id);
+
+        // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
+        if ($book->user_id !== Auth::id()) {
+            return response()->json([
+                'message' => 'この操作は許可されていません。',
+            ], 403);
+        }
 
         // バリデーション済みのデータを変数に受ける
         $data = $request->validated();
@@ -103,10 +135,22 @@ class BookController extends Controller
         return new BookResource($book->load('genres'));
     }
 
-    // 書籍を削除する (DELETE /api/v1/books/{book})
-    public function destroy($id)
+    /**
+     * 書籍を削除する (DELETE /api/v1/books/{book})
+     *
+     * @param int $id 書籍ID
+     * @return \Illuminate\Http\JsonResponse 削除成功メッセージ（ステータスコード 200）
+     */
+    public function destroy(int $id)
     {
         $book = Book::findOrFail($id);
+
+        // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
+        if ($book->user_id !== Auth::id()) {
+            return response()->json([
+                'message' => 'この操作は許可されていません。',
+            ], 403);
+        }
 
         // 中間テーブル（book_genre）の削除
         $book->genres()->detach();
@@ -115,10 +159,13 @@ class BookController extends Controller
         $book->favorites()->delete();
 
         // レビューに紐づくいいね（review_likes）を削除してからレビューを削除
-        foreach ($book->reviews as $review) {
+        $book->reviews->each(function ($review) {
             $review->reviewLikes()->delete();
-        }
+        });
         $book->reviews()->delete();
+
+        // 読書計画テーブル（reading_plans）の削除  20261025 追記 MN
+        $book->readingPlans()->delete();
 
         // 書籍本体を削除
         $book->delete();

@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Book extends Model
 {
@@ -20,33 +23,59 @@ class Book extends Model
         'image_url',
     ];
 
-    // 追加：型設定　　2026/10/10　MN
+    // 追加：型設定  2026/10/10 MN
     protected $casts = [
         'published_date' => 'date',
     ];
 
-    // リレーション: 書籍を登録したユーザー
-    public function user()
+    /**
+     * リレーション: 書籍を登録したユーザー
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // リレーション: 書籍に対するレビュー
-    public function reviews()
+    /**
+     * リレーション: 書籍に対するレビュー
+     *
+     * @return HasMany
+     */
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
-    // リレーション: 書籍のお気に入り登録
-    public function favorites()
+    /**
+     * リレーション: 書籍のお気に入り登録
+     *
+     * @return HasMany
+     */
+    public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);
     }
 
-    // リレーション: 書籍のジャンル（多対多）
-    public function genres()
+    /**
+     * リレーション: 書籍のジャンル（多対多）
+     *
+     * @return BelongsToMany
+     */
+    public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Genre::class, 'book_genre')
             ->withTimestamps();
+    }
+
+    /**
+     * リレーション: 書籍の読書計画
+     *
+     * @return HasMany
+     */
+    public function readingPlans(): HasMany
+    {
+        return $this->hasMany(ReadingPlan::class);
     }
 }
