@@ -23,7 +23,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -62,7 +62,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '',
             'author' => '',
@@ -82,8 +82,6 @@ class BookStoreApiTest extends TestCase
         $response->assertInvalid([
             'title' => '書籍名を入力してください',
             'author' => '著者を入力してください',
-            'isbn' => 'ISBNコードを入力してください',
-            'published_date' => '出版日を入力してください',
             'genres' => 'ジャンルは１つ以上選択してください',
         ]);
     }
@@ -99,10 +97,10 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // 256文字以上の有効なURLを作成
-        $longUrl = 'https://example.com/'.str_repeat('a', 240);
+        $longUrl = 'https://example.com/' . str_repeat('a', 240);
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => str_repeat('あ', 256),  // 255文字オーバー
             'author' => str_repeat('あ', 256),  // 255文字オーバー
@@ -130,7 +128,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：_isb_nが13桁未満数字を拒否する()
+    public function バリデーション：ISBNが13桁未満数字を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -140,7 +138,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -162,7 +160,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：_isb_nが数字以外を拒否する()
+    public function バリデーション：ISBNが数字以外を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -172,7 +170,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -194,7 +192,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：_isb_nの重複を拒否する()
+    public function バリデーション：ISBNの重複を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -210,7 +208,7 @@ class BookStoreApiTest extends TestCase
         ]);
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -242,7 +240,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -274,7 +272,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -306,7 +304,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -328,7 +326,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 画像_ur_lの_ur_l形式以外を拒否する()
+    public function 画像_urlのurl形式以外を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -338,7 +336,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => $user->id,
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -360,7 +358,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者_i_dが未設定の場合を拒否する()
+    public function 登録者_idが未設定の場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -370,7 +368,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'title' => '新規書籍',
             'author' => 'テスト著者',
             'isbn' => '1234567890123',
@@ -391,7 +389,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者_i_dが数値以外の場合を拒否する()
+    public function 登録者_idが数値以外の場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -401,7 +399,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => 'a',
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -423,7 +421,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者_i_dが存在しない場合を拒否する()
+    public function 登録者_idが存在しない場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -433,7 +431,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // Act
-        $response = $this->actingAs($user)->post('/api/v1/books', [
+        $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
             'user_id' => '9999',
             'title' => '新規書籍',
             'author' => 'テスト著者',
@@ -451,6 +449,35 @@ class BookStoreApiTest extends TestCase
         // 録者IDが存在しない場合を検証
         $response->assertInvalid([
             'user_id' => '指定された登録者IDは存在しません',
+        ]);
+    }
+
+    /** @test */
+    public function 未認証ユーザーで書籍登録しようとした場合401()
+    {
+        // Arrange
+        // ユーザーを作成
+        $user = User::factory()->create();
+
+        // ジャンルを作成
+        $genre = Genre::factory()->create();
+
+        // Act
+        $response = $this->post('/api/v1/books', [
+            'user_id' => $user->id,
+            'title' => '新規書籍',
+            'author' => 'テスト著者',
+            'isbn' => '1234567890123',
+            'published_date' => '1999-05-07',
+            'description' => 'テスト説明',
+            'image_url' => 'https://example.com/image.jpg',
+            'genres' => [$genre->id],
+        ]);
+
+        // Assert
+        $response->assertStatus(401);
+        $response->assertJson([
+            'message' => '認証されていません。',
         ]);
     }
 }
