@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Genre;
 use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ReadingReportController extends Controller
 {
-    public function index()
+    /**
+     * 読書レポートと統計情報の表示
+     */
+    public function index(): View
     {
         $user = Auth::user();
 

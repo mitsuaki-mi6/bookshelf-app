@@ -6,24 +6,33 @@ use App\Http\Requests\ReviewRequest;
 use App\Http\Requests\StoreReviewRequest;  // 投稿用
 use App\Models\Book;        // 更新用
 use App\Models\Review;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class ReviewController extends Controller
 {
-    // レビューを登録する
-    public function store(StoreReviewRequest $request, Book $book)
+    /**
+     * レビューを登録する
+     */
+    public function store(StoreReviewRequest $request, Book $book): RedirectResponse
     {
-        $book->reviews()->create(array_merge(
-            $request->validated(),
-            ['user_id' => $request->user()->id]
-        ));
+        // トランザクションで安全に登録
+        DB::transaction(function () use ($request, $book) {
+            $book->reviews()->create(array_merge(
+                $request->validated(),
+                ['user_id' => $request->user()->id]
+            ));
+        });
 
         return redirect()->route('books.show', $book)->with('success', 'レビューを投稿しました。');
     }
 
-    // レビュー編集
-    // レビュー編集画面を表示する
-    public function edit(Book $book, Review $review)
+    /**
+     * レビュー編集画面を表示する
+     */
+    public function edit(Book $book, Review $review): View
     {
         // レビューの所有者がログイン中のユーザーでなければ403エラー
         if ($review->user_id !== auth()->id()) {
@@ -33,21 +42,28 @@ class ReviewController extends Controller
         return view('reviews.edit', compact('book', 'review'));
     }
 
-    // レビューを更新する
-    public function update(ReviewRequest $request, Book $book, Review $review)
+    /**
+     * レビューを更新する
+     */
+    public function update(ReviewRequest $request, Book $book, Review $review): RedirectResponse
     {
         // レビューの所有者がログイン中のユーザーでなければ403エラー
         if ($review->user_id !== auth()->id()) {
             abort(403);
         }
 
-        $review->update($request->validated());
+        // トランザクションで安全に更新
+        DB::transaction(function () use ($request, $review) {
+            $review->update($request->validated());
+        });
 
         return redirect()->route('books.show', $review->book)->with('success', 'レビューを更新しました。');
     }
 
-    // レビューを削除する
-    public function destroy(Review $review)
+    /**
+     * レビューを削除する
+     */
+    public function destroy(Review $review): RedirectResponse
     {
         // レビューの所有者がログイン中のユーザーでなければ403エラー
         if ($review->user_id !== auth()->id()) {
@@ -57,20 +73,28 @@ class ReviewController extends Controller
         // 削除する前に紐づく書籍を変数に保持しておく
         $book = $review->book;
 
-        // レビューを削除
-        $review->delete();
+        // トランザクションで安全に削除
+        DB::transaction(function () use ($review) {
+            // レビューを削除
+            $review->delete();
+        });
 
         // 保持しておいた $book を使って詳細ページへリダイレクト
         return redirect()->route('books.show', $book)->with('success', 'レビューを削除しました。');
     }
 
-    // レビューのいいねを切り替える（トグル）
-    public function like(Request $request, Review $review)
+    /**
+     * レビューのいいねを切り替える（トグル）
+     */
+    public function like(Request $request, Review $review): RedirectResponse
     {
         $user = $request->user();
 
-        // すでに「いいね」しているか判定し、存在すれば削除、なければ追加する
-        $user->likedReviews()->toggle($review);
+        // トランザクションで安全にいいねを切り替え
+        DB::transaction(function () use ($user, $review) {
+            // すでに「いいね」しているか判定し、存在すれば削除、なければ追加する
+            $user->likedReviews()->toggle($review);
+        });
 
         return back()->with('success', 'いいねを更新しました。');
     }

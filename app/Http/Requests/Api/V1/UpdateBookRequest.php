@@ -7,9 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateBookRequest extends FormRequest
 {
     /**
-     * リクエストを許可するかどうかを判定する
-     *
-     * @return bool
+     * ユーザーがこのリクエストを行う権限があるかどうかを判定する
      */
     public function authorize(): bool
     {
@@ -17,9 +15,7 @@ class UpdateBookRequest extends FormRequest
     }
 
     /**
-     * 書籍更新バリデーションルールを取得する
-     *
-     * @return array<string, mixed>
+     * リクエストに適用されるバリデーションルールを取得する
      */
     public function rules(): array
     {
@@ -28,7 +24,7 @@ class UpdateBookRequest extends FormRequest
             'genres.*' => ['integer', 'exists:genres,id'],
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
-            'isbn' => ['nullable', 'string', 'digits:13', 'unique:books,isbn,' . $this->route('book')],
+            'isbn' => ['nullable', 'string', 'digits:13', 'unique:books,isbn,'.$this->route('book')],
             'published_date' => ['nullable', 'date', 'max:10'],
             'description' => ['nullable', 'string', 'max:255'],
             'image_url' => ['nullable', 'url', 'max:255'],
@@ -37,9 +33,7 @@ class UpdateBookRequest extends FormRequest
     }
 
     /**
-     * バリデーションエラーメッセージを取得する
-     *
-     * @return array<string, string>
+     * 定義済みバリデーションルールのエラーメッセージを取得する
      */
     public function messages(): array
     {

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ReadingPlanStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ReadingPlan extends Model
 {
@@ -24,14 +25,18 @@ class ReadingPlan extends Model
         'status' => ReadingPlanStatus::class,
     ];
 
-    // リレーション: 読書計画を登録したユーザー
-    public function user()
+    /**
+     * リレーション: 読書計画を登録したユーザー
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // リレーション: 読書計画に登録された書籍
-    public function book()
+    /**
+     * リレーション: 読書計画に登録された書籍
+     */
+    public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
     }

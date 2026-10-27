@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Book;
 use App\Models\Favorite;
 use App\Models\Genre;
+use App\Models\ReadingPlan;
 use App\Models\Review;
 use App\Models\ReviewLike;
 use App\Models\User;
@@ -213,6 +214,12 @@ class BookCrudTest extends TestCase
             'user_id' => $user->id, // ログイン中のユーザーIDを使用
         ]);
 
+        // 読書計画を作成
+        $readingPlan = ReadingPlan::factory()->create([
+            'book_id' => $book->id,
+            'user_id' => $user->id, // ログイン中のユーザーIDを使用
+        ]);
+
         // Act
         $response = $this->actingAs($user)->delete("/books/{$book->id}");
 
@@ -241,6 +248,11 @@ class BookCrudTest extends TestCase
         // レビューのいいねが削除されていることを確認
         $this->assertDatabaseMissing('review_likes', [
             'review_id' => $review->id,
+        ]);
+
+        //  読書計画が削除されていることを確認
+        $this->assertDatabaseMissing('reading_plans', [
+            'id' => $readingPlan->id,
         ]);
     }
 

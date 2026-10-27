@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ReviewLike extends Model
 {
@@ -14,14 +15,18 @@ class ReviewLike extends Model
         'review_id',
     ];
 
-    // リレーション: いいねしたユーザー
-    public function user()
+    /**
+     * リレーション: いいねしたユーザー
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // リレーション: いいねされたレビュー
-    public function review()
+    /**
+     * リレーション: いいねされたレビュー
+     */
+    public function review(): BelongsTo
     {
         return $this->belongsTo(Review::class);
     }

@@ -8,7 +8,7 @@ use App\Models\User;
 class ReviewPolicy
 {
     /**
-     * Determine whether the user can update the model.
+     * ユーザーがモデルを更新できるかどうかを判定する
      */
     public function update(User $user, Review $review): bool
     {
@@ -16,7 +16,7 @@ class ReviewPolicy
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * ユーザーがモデルを削除できるかどうかを判定する
      */
     public function delete(User $user, Review $review): bool
     {

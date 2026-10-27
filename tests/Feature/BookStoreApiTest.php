@@ -82,7 +82,7 @@ class BookStoreApiTest extends TestCase
         $response->assertInvalid([
             'title' => '書籍名を入力してください',
             'author' => '著者を入力してください',
-            'genres' => 'ジャンルは１つ以上選択してください',
+            'genres' => 'ジャンルは1つ以上選択してください',
         ]);
     }
 
@@ -289,7 +289,7 @@ class BookStoreApiTest extends TestCase
         ]);
         // ジャンルの未指定を検証
         $response->assertInvalid([
-            'genres' => 'ジャンルは１つ以上選択してください',
+            'genres' => 'ジャンルは1つ以上選択してください',
         ]);
     }
 
@@ -358,7 +358,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者_idが未設定の場合を拒否する()
+    public function 登録者idが未設定の場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -389,7 +389,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者_idが数値以外の場合を拒否する()
+    public function 登録者idが数値以外の場合を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -421,7 +421,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function 登録者_idが存在しない場合を拒否する()
+    public function 登録者idが存在しない場合を拒否する()
     {
         // Arrange
         // ユーザーを作成

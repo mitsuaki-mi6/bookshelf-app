@@ -7,14 +7,16 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreBookRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * ユーザーがこのリクエストを行う権限があるかどうかを判定する
      */
     public function authorize(): bool
     {
         return true;
     }
 
-    // 書籍登録バリデーションルール
+    /**
+     * リクエストに適用されるバリデーションルールを取得する
+     */
     public function rules(): array
     {
         return [
@@ -22,14 +24,16 @@ class StoreBookRequest extends FormRequest
             'genres.*' => ['integer', 'exists:genres,id'],
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
-            'isbn' => ['nullable', 'string', 'digits:13', 'unique:books,isbn'], // required → nullableに変更　2026/10/10 MN
-            'published_date' => ['nullable', 'date', 'max:10'], // required → nullableに変更　2026/10/10 MN
+            'isbn' => ['nullable', 'string', 'digits:13', 'unique:books,isbn'], // required → nullableに変更 2026/10/10 MN
+            'published_date' => ['nullable', 'date', 'max:10'], // required → nullableに変更 2026/10/10 MN
             'description' => ['nullable', 'string', 'max:255'],
             'image_url' => ['nullable', 'url', 'max:255'],
         ];
     }
 
-    // バリデーションメッセージ
+    /**
+     * 定義済みバリデーションルールのエラーメッセージを取得する
+     */
     public function messages(): array
     {
         return [

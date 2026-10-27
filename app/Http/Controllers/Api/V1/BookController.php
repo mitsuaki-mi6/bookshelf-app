@@ -7,18 +7,21 @@ use App\Http\Requests\Api\V1\IndexBookRequest;
 use App\Http\Requests\Api\V1\StoreBookRequest;
 use App\Http\Requests\Api\V1\UpdateBookRequest;
 use App\Http\Resources\Api\V1\BookResource;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Book;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
     /**
      * 書籍一覧を取得する (GET /api/v1/books)
      *
-     * @param IndexBookRequest $request 検索キーワードやジャンルIDを含むリクエスト
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\JsonResponse 書籍一覧リソースコレクション（0件の場合はメッセージを返却）
+     * @param  IndexBookRequest  $request  検索キーワードやジャンルIDを含むリクエスト
+     * @return AnonymousResourceCollection|JsonResponse 書籍一覧リソースコレクション（0件の場合はメッセージを返却）
      */
-    public function index(IndexBookRequest $request)
+    public function index(IndexBookRequest $request): AnonymousResourceCollection|JsonResponse
     {
         // クエリのベースを作成しリレーションを事前ロード
         $query = Book::with(['genres', 'reviews']);
@@ -59,10 +62,10 @@ class BookController extends Controller
     /**
      * 書籍詳細を取得する (GET /api/v1/books/{book})
      *
-     * @param int $id 書籍ID
+     * @param  int  $id  書籍ID
      * @return BookResource 指定された書籍の詳細リソース
      */
-    public function show(int $id)
+    public function show(int $id): BookResource
     {
         // 書籍詳細で必要なリレーションを事前ロード
         $book = Book::with(['genres', 'reviews.user'])->findOrFail($id);
@@ -74,10 +77,10 @@ class BookController extends Controller
     /**
      * 書籍を新規登録する (POST /api/v1/books)
      *
-     * @param StoreBookRequest $request バリデーション済みの登録データリクエスト
-     * @return \Illuminate\Http\JsonResponse 登録成功メッセージと作成された書籍データ（ステータスコード 201）
+     * @param  StoreBookRequest  $request  バリデーション済みの登録データリクエスト
+     * @return JsonResponse 登録成功メッセージと作成された書籍データ（ステータスコード 201）
      */
-    public function store(StoreBookRequest $request)
+    public function store(StoreBookRequest $request): JsonResponse
     {
         // バリデーション済みのデータを取得
         $data = $request->validated();
@@ -88,10 +91,15 @@ class BookController extends Controller
         $genreIds = $data['genres'] ?? []; // ジャンルが未選択の場合の安全対策
         unset($data['genres']); // booksテーブルに存在しないカラムなので削除
 
-        // 書籍テーブルに登録
-        $book = Book::create($data);
-        // 中間テーブルにジャンルを紐付け
-        $book->genres()->sync($genreIds);
+        $book = null;
+
+        // トランザクションで安全に登録
+        DB::transaction(function () use ($data, $genreIds, &$book) {
+            // 書籍テーブルに登録
+            $book = Book::create($data);
+            // 中間テーブルにジャンルを紐付け
+            $book->genres()->sync($genreIds);
+        });
 
         // ジャンルをロードし、ステータスコード 201でレスポンスを返却
         return response()->json([
@@ -103,11 +111,11 @@ class BookController extends Controller
     /**
      * 書籍を更新する (PUT /api/v1/books/{book})
      *
-     * @param UpdateBookRequest $request バリデーション済みの更新データリクエスト
-     * @param int $id 書籍ID
-     * @return BookResource 更新された書籍データリソース
+     * @param  UpdateBookRequest  $request  バリデーション済みの更新データリクエスト
+     * @param  int  $id  書籍ID
+     * @return BookResource|JsonResponse 更新された書籍データリソース または エラーレスポンス
      */
-    public function update(UpdateBookRequest $request, int $id)
+    public function update(UpdateBookRequest $request, int $id): BookResource|JsonResponse
     {
         $book = Book::findOrFail($id);
 
@@ -118,18 +126,21 @@ class BookController extends Controller
             ], 403);
         }
 
-        // バリデーション済みのデータを変数に受ける
-        $data = $request->validated();
+        // トランザクションで安全に更新
+        DB::transaction(function () use ($request, $book) {
+            // バリデーション済みのデータを変数に受ける
+            $data = $request->validated();
 
-        // genres がリクエストに含まれている場合のみ処理する
-        if (array_key_exists('genres', $data)) {
-            $genreIds = $data['genres'];
-            unset($data['genres']); // booksテーブルに存在しないカラムなので除外
-            $book->genres()->sync($genreIds);
-        }
+            // genres がリクエストに含まれている場合のみ処理する
+            if (array_key_exists('genres', $data)) {
+                $genreIds = $data['genres'];
+                unset($data['genres']); // booksテーブルに存在しないカラムなので除外
+                $book->genres()->sync($genreIds);
+            }
 
-        // 書籍情報を更新
-        $book->update($data);
+            // 書籍情報を更新
+            $book->update($data);
+        });
 
         // ジャンルをロードし、APIリソースを使って単体データを整形して返却
         return new BookResource($book->load('genres'));
@@ -138,10 +149,10 @@ class BookController extends Controller
     /**
      * 書籍を削除する (DELETE /api/v1/books/{book})
      *
-     * @param int $id 書籍ID
-     * @return \Illuminate\Http\JsonResponse 削除成功メッセージ（ステータスコード 200）
+     * @param  int  $id  書籍ID
+     * @return JsonResponse 削除成功メッセージ（ステータスコード 200）
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $book = Book::findOrFail($id);
 
@@ -152,23 +163,26 @@ class BookController extends Controller
             ], 403);
         }
 
-        // 中間テーブル（book_genre）の削除
-        $book->genres()->detach();
+        // トランザクションで安全に削除
+        DB::transaction(function () use ($book) {
+            // 中間テーブル（book_genre）の削除
+            $book->genres()->detach();
 
-        // お気に入り（favorites）の削除
-        $book->favorites()->delete();
+            // お気に入り（favorites）の削除
+            $book->favorites()->delete();
 
-        // レビューに紐づくいいね（review_likes）を削除してからレビューを削除
-        $book->reviews->each(function ($review) {
-            $review->reviewLikes()->delete();
+            // レビューに紐づくいいね（review_likes）を削除してからレビューを削除
+            $book->reviews->each(function ($review) {
+                $review->reviewLikes()->delete();
+            });
+            $book->reviews()->delete();
+
+            // 読書計画テーブル（reading_plans）の削除
+            $book->readingPlans()->delete();
+
+            // 書籍本体を削除
+            $book->delete();
         });
-        $book->reviews()->delete();
-
-        // 読書計画テーブル（reading_plans）の削除  20261025 追記 MN
-        $book->readingPlans()->delete();
-
-        // 書籍本体を削除
-        $book->delete();
 
         // 削除成功時にメッセージをJSONで返却（ステータスコード200）
         return response()->json([

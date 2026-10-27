@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use App\Models\Book;
 use App\Models\Favorite;
 use App\Models\Genre;
+use App\Models\ReadingPlan;
 use App\Models\Review;
 use App\Models\ReviewLike;
-use App\Models\ReadingPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -57,7 +57,6 @@ class BookDestroyApiTest extends TestCase
             'book_id' => $book->id,
             'user_id' => $user->id, // ログイン中のユーザーIDを使用
         ]);
-
 
         // Act  編集データ
         $response = $this->actingAs($user, 'sanctum')->delete("/api/v1/books/{$book->id}");

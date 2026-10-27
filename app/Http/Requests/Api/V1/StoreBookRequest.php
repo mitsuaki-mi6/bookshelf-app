@@ -7,9 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreBookRequest extends FormRequest
 {
     /**
-     * リクエストを許可するかどうかを判定する
-     *
-     * @return bool
+     * ユーザーがこのリクエストを行う権限があるかどうかを判定する
      */
     public function authorize(): bool
     {
@@ -17,9 +15,7 @@ class StoreBookRequest extends FormRequest
     }
 
     /**
-     * 書籍登録バリデーションルールを取得する
-     *
-     * @return array<string, mixed>
+     * リクエストに適用されるバリデーションルールを取得する
      */
     public function rules(): array
     {
@@ -37,9 +33,7 @@ class StoreBookRequest extends FormRequest
     }
 
     /**
-     * バリデーションエラーメッセージを取得する
-     *
-     * @return array<string, string>
+     * 定義済みバリデーションルールのエラーメッセージを取得する
      */
     public function messages(): array
     {
@@ -55,7 +49,7 @@ class StoreBookRequest extends FormRequest
             'description.max' => '説明は255文字以内で入力してください',
             'image_url.url' => '画像URLは有効なURL形式で入力してください',
             'image_url.max' => '画像URLは255文字以内で入力してください',
-            'genres.required' => 'ジャンルは１つ以上選択してください',
+            'genres.required' => 'ジャンルは1つ以上選択してください',
             'user_id.required' => '登録者IDを入力してください',
             'user_id.integer' => '登録者IDは数値で入力してください',
             'user_id.exists' => '指定された登録者IDは存在しません',

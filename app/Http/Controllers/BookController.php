@@ -7,16 +7,22 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use App\Models\Genre;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\View\View;
 
 class BookController extends Controller
 {
-    // Google Books API を使った ISBN 検索処理
-    public function searchIsbn($isbn)
+    /**
+     * Google Books API を使った ISBN 検索処理
+     */
+    public function searchIsbn(string $isbn): JsonResponse
     {
         // 13桁の数字かどうかチェック (13桁以外 -> 400)
-        if (!preg_match('/^\d{13}$/', $isbn)) {
+        if (! preg_match('/^\d{13}$/', $isbn)) {
             return response()->json([
                 'error' => 'ISBNは13桁で入力してください。',
             ], 400);
@@ -47,7 +53,7 @@ class BookController extends Controller
             ], 500);
         }
 
-        // 書籍が見つからない -> 404 （ここをスッキリ修正！）
+        // 書籍が見つからない -> 404
         if (empty($response->json('items'))) {
             return response()->json([
                 'error' => '書籍が見つかりませんでした。',
@@ -66,8 +72,10 @@ class BookController extends Controller
         ], 200);
     }
 
-    // PG01 書籍一覧（トップ）
-    public function index(IndexBookRequest $request)
+    /**
+     * PG01 書籍一覧（トップ）
+     */
+    public function index(IndexBookRequest $request): View
     {
         // バリデーションは IndexBookRequest で実行済み
         $request->validated();
@@ -78,8 +86,8 @@ class BookController extends Controller
         if ($request->filled('keyword')) {
             $keyword = $request->input('keyword');
             $query->where(function ($q) use ($keyword) {
-                $q->whereRaw('title COLLATE utf8mb4_bin LIKE ?', ['%' . $keyword . '%'])
-                    ->orWhereRaw('author COLLATE utf8mb4_bin LIKE ?', ['%' . $keyword . '%']);
+                $q->whereRaw('title COLLATE utf8mb4_bin LIKE ?', ['%'.$keyword.'%'])
+                    ->orWhereRaw('author COLLATE utf8mb4_bin LIKE ?', ['%'.$keyword.'%']);
             });
         }
 
@@ -120,9 +128,11 @@ class BookController extends Controller
         return view('books.index', compact('books', 'genres'));
     }
 
-    // PG02	書籍詳細
-    // 書籍詳細画面を表示する
-    public function show(Book $book)
+    /**
+     * PG02 書籍詳細
+     * 書籍詳細画面を表示する
+     */
+    public function show(Book $book): View
     {
         // 詳細画面で必要なリレーションや平均評価もビューに渡す
         $book->load(['genres', 'reviews.user', 'reviews.likedByUsers']);
@@ -131,39 +141,51 @@ class BookController extends Controller
         return view('books.show', compact('book'));
     }
 
-    // 書籍を削除する
-    public function destroy(Book $book)
+    /**
+     * 書籍を削除する
+     */
+    public function destroy(Book $book): RedirectResponse
     {
         // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
         if ($book->user_id !== auth()->id()) {
             abort(403);
         }
 
-        $book->genres()->detach(); // 中間テーブルの削除
-        $book->favorites()->delete(); // お気に入りの削除
+        // 複数テーブルの削除処理をトランザクションで保護
+        DB::transaction(function () use ($book) {
+            $book->genres()->detach(); // 中間テーブルの削除
+            $book->favorites()->delete(); // お気に入りの削除
 
-        // レビューとそのいいねを削除する場合
-        foreach ($book->reviews as $review) {
-            $review->reviewLikes()->delete(); // いいねの削除
-        }
-        $book->reviews()->delete(); // レビューの削除
+            // レビューとそのいいねを削除する場合
+            $book->reviews->each(function ($review) { // レビューの削除
+                $review->reviewLikes()->delete();  // いいねの削除
+            });
 
-        $book->delete();  // 書籍を論理削除
+            $book->reviews()->delete(); // レビューの削除
+
+            $book->readingPlans()->delete(); // 読書計画の削除
+
+            $book->delete();  // 書籍を削除
+        });
 
         return redirect()->route('books.index')->with('success', '書籍を削除しました。');
     }
 
-    // PG03	書籍登録
-    // 書籍登録画面を表示する
-    public function create()
+    /**
+     * PG03 書籍登録
+     * 書籍登録画面を表示する
+     */
+    public function create(): View
     {
         $genres = Genre::all();
 
         return view('books.create', compact('genres'));
     }
 
-    // 書籍を登録する
-    public function store(StoreBookRequest $request)
+    /**
+     * 書籍を登録する
+     */
+    public function store(StoreBookRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
@@ -173,17 +195,23 @@ class BookController extends Controller
         $genreIds = $data['genres'] ?? []; // ジャンルが未選択の場合の安全対策
         unset($data['genres']); // booksテーブルに存在しないカラムなので削除
 
-        // 書籍テーブルに登録
-        $book = Book::create($data);
-        // 中間テーブルにジャンルを紐付け
-        $book->genres()->sync($genreIds);
+        // 登録処理をトランザクションで保護
+        $book = null;
+        DB::transaction(function () use ($data, $genreIds, &$book) {
+            // 書籍テーブルに登録
+            $book = Book::create($data);
+            // 中間テーブルにジャンルを紐付け
+            $book->genres()->sync($genreIds);
+        });
 
         return redirect()->route('books.index')->with('success', '書籍を登録しました。');
     }
 
-    // PG04 書籍編集
-    // 書籍編集画面を表示する
-    public function edit(Book $book)
+    /**
+     * PG04 書籍編集
+     * 書籍編集画面を表示する
+     */
+    public function edit(Book $book): View
     {
         // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
         if ($book->user_id !== auth()->id()) {
@@ -196,26 +224,30 @@ class BookController extends Controller
         return view('books.edit', compact('book', 'genres'));
     }
 
-    // 書籍を更新する
-    public function update(UpdateBookRequest $request, Book $book)
+    /**
+     * 書籍を更新する
+     */
+    public function update(UpdateBookRequest $request, Book $book): RedirectResponse
     {
         // 書籍の所有者がログイン中のユーザーでなければ403エラーを返す
         if ($book->user_id !== auth()->id()) {
             abort(403);
         }
 
-        // バリデーション済みのデータを取得し、書籍情報を更新
-        $book->update($request->validated());
+        // 更新処理をトランザクションで保護
+        DB::transaction(function () use ($request, $book) {
+            // バリデーション済みのデータを取得し、書籍情報を更新
+            $book->update($request->validated());
 
-        // ジャンルの中間テーブル情報を更新（チェックされたジャンルIDで同期）
-        if ($request->has('genres')) {
-            $book->genres()->sync($request->genres);
-        } else {
-            // 万が一ジャンルがすべて外された場合の考慮（必要に応じて）
-            $book->genres()->sync([]);
-        }
+            // ジャンルの中間テーブル情報を更新（チェックされたジャンルIDで同期）
+            if ($request->has('genres')) {
+                $book->genres()->sync($request->genres);
+            } else {
+                // 万が一ジャンルがすべて外された場合の考慮
+                $book->genres()->sync([]);
+            }
+        });
 
         return redirect()->route('books.index')->with('success', '書籍を更新しました。');
     }
 }
-
