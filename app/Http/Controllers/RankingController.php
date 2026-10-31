@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Illuminate\View\View;
 
 class RankingController extends Controller
 {
-    public function index()
+    /**
+     * レビュー平均が高い順に上位10件の書籍を取得
+     *
+     * @return View：ランキング一覧画面ビュー
+     */
+    public function index(): View
     {
-        // レビュー平均が高い順に上位10件の書籍を取得
         $rankedBooks = Book::with('genres')->withAvg('reviews', 'rating')
             ->withCount('reviews')
             ->has('reviews')

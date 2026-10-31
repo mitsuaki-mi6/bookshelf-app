@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -13,7 +15,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * 一括代入可能な属性
      *
      * @var array<int, string>
      */
@@ -24,7 +26,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * シリアライズ時に隠す属性
      *
      * @var array<int, string>
      */
@@ -34,7 +36,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * キャストする必要のある属性
      *
      * @var array<string, string>
      */
@@ -43,27 +45,43 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // リレーション: ユーザーが投稿した書籍
-    public function books()
+    /**
+     * リレーション: ユーザーが投稿した書籍
+     *
+     * @return HasMany：書籍モデルのコレクションへのリレーション
+     */
+    public function books(): HasMany
     {
         return $this->hasMany(Book::class);
     }
 
-    // リレーション: ユーザーが投稿したレビュー
-    public function reviews()
+    /**
+     * リレーション: ユーザーが投稿したレビュー
+     *
+     * @return HasMany：レビューモデルのコレクションへのリレーション
+     */
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
-    // リレーション: ユーザーがいいねしたレビュー
-    public function likedReviews()
+    /**
+     * リレーション: ユーザーがいいねしたレビュー
+     *
+     * @return BelongsToMany：レビューモデルのコレクションへのリレーション
+     */
+    public function likedReviews(): BelongsToMany
     {
         return $this->belongsToMany(Review::class, 'review_likes', 'user_id', 'review_id')
             ->withTimestamps();
     }
 
-    // リレーション: ユーザーがお気に入り登録した書籍
-    public function favoriteBooks()
+    /**
+     * リレーション: ユーザーがお気に入り登録した書籍
+     *
+     * @return BelongsToMany：書籍モデルのコレクションへのリレーション
+     */
+    public function favoriteBooks(): BelongsToMany
     {
         return $this->belongsToMany(Book::class, 'favorites', 'user_id', 'book_id')
             ->withTimestamps();

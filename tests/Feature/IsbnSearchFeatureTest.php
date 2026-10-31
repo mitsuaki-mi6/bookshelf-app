@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -76,7 +77,7 @@ class IsbnSearchFeatureTest extends TestCase
     }
 
     /** @test */
-    public function ISBNが13桁以外の時は400エラーが返ること()
+    public function isb_nが13桁以外の時は400エラーが返ること()
     {
         // Arrange
         $user = User::factory()->create();
@@ -91,7 +92,7 @@ class IsbnSearchFeatureTest extends TestCase
     }
 
     /** @test */
-    public function GoogleBooksAPIのクォータ超過の時は429エラーが返ること()
+    public function google_books_ap_iのクォータ超過の時は429エラーが返ること()
     {
         // Arrange
         $user = User::factory()->create();
@@ -110,7 +111,7 @@ class IsbnSearchFeatureTest extends TestCase
     }
 
     /** @test */
-    public function API通信エラーの時は500エラーが返ること()
+    public function ap_i通信エラーの時は500エラーが返ること()
     {
         // Arrange
         $user = User::factory()->create();
@@ -119,7 +120,7 @@ class IsbnSearchFeatureTest extends TestCase
         // 例外をスローさせてcatchブロック（500エラー）を発動させる
         Http::fake([
             'https://www.googleapis.com/books/v1/volumes*' => function () {
-                throw new \Illuminate\Http\Client\ConnectionException();
+                throw new ConnectionException;
             },
         ]);
 

@@ -71,7 +71,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function ISBNが自身でも重複エラーとならず更新できること()
+    public function isb_nが自身でも重複エラーとならず更新できること()
     {
         // Arrange
         // ユーザーを作成
@@ -220,7 +220,7 @@ class BookUpdateApiTest extends TestCase
         $book->genres()->attach($genre->id);
 
         // 256文字以上の有効なURLを作成
-        $longUrl = 'https://example.com/' . str_repeat('a', 240);
+        $longUrl = 'https://example.com/'.str_repeat('a', 240);
 
         // Act  編集データ（文字数オーパ）
         $response = $this->actingAs($user, 'sanctum')->put("/api/v1/books/{$book->id}", [
@@ -251,7 +251,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNが13桁未満数字を拒否する()
+    public function バリデーション：_isb_nが13桁未満数字を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -292,7 +292,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNが数字以外を拒否する()
+    public function バリデーション：_isb_nが数字以外を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -333,7 +333,7 @@ class BookUpdateApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNの重複を拒否する()
+    public function バリデーション：_isb_nの重複を拒否する()
     {
         // Arrange
         // ユーザーを作成

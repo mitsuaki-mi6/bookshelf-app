@@ -7,14 +7,20 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateReadingPlanRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * ユーザーがこのリクエストを行う権限があるかどうかを判定する
+     *
+     * @return bool：権限の有無
      */
     public function authorize(): bool
     {
         return true;
     }
 
-    // 読書計画作成バリデーションルール
+    /**
+     * リクエストに適用されるバリデーションルールを取得する
+     *
+     * @return array<string, mixed>：バリデーションルール
+     */
     public function rules(): array
     {
         return [
@@ -22,7 +28,11 @@ class UpdateReadingPlanRequest extends FormRequest
         ];
     }
 
-    // バリデーションメッセージ
+    /**
+     * 定義済みバリデーションルールのエラーメッセージを取得する
+     *
+     * @return array<string, string>：エラーメッセージ
+     */
     public function messages(): array
     {
         return [

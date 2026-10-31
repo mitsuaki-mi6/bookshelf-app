@@ -7,20 +7,24 @@ use Illuminate\Foundation\Http\FormRequest;
 class IndexReadingPlanRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * ユーザーがこのリクエストを行う権限があるかどうかを判定する
+     *
+     * @return bool：権限の有無
      */
     public function authorize(): bool
     {
         return true;
     }
 
-    // 読書計画一覧バリデーションルール
+    /**
+     * リクエストに適用されるバリデーションルールを取得する
+     *
+     * @return array<string, mixed>：バリデーションルール
+     */
     public function rules(): array
     {
         return [
             'status' => ['nullable', 'string', 'in:in_progress,completed,expired'],
         ];
     }
-
-    // バリデーションメッセージ  無し
 }

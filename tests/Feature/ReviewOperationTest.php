@@ -54,7 +54,7 @@ class ReviewOperationTest extends TestCase
     }
 
     /** @test */
-    public function 認証済で他人の_i_dでレビュー更新時は403エラー()
+    public function 認証済で他人のidでレビュー更新時は403エラー()
     {
         // Arrange
         // ユーザーを作成
@@ -106,7 +106,7 @@ class ReviewOperationTest extends TestCase
     }
 
     /** @test */
-    public function 認証済で他人の_i_dでレビュー削除時は403エラー()
+    public function 認証済で他人のidでレビュー削除時は403エラー()
     {
         // Arrange
         // ユーザーを作成

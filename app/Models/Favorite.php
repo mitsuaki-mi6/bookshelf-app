@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Favorite extends Model
 {
@@ -14,14 +15,22 @@ class Favorite extends Model
         'book_id',
     ];
 
-    // リレーション: お気に入り登録したユーザー
-    public function user()
+    /**
+     * リレーション: お気に入り登録したユーザー
+     *
+     * @return BelongsTo：ユーザーモデルへのリレーション
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // リレーション: お気に入り登録された書籍
-    public function book()
+    /**
+     * リレーション: お気に入り登録された書籍
+     *
+     * @return BelongsTo：書籍モデルへのリレーション
+     */
+    public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
     }

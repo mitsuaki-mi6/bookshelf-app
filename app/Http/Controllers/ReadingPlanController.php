@@ -8,11 +8,19 @@ use App\Http\Requests\StoreReadingPlanRequest;
 use App\Http\Requests\UpdateReadingPlanRequest;
 use App\Models\Book;
 use App\Models\ReadingPlan;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class ReadingPlanController extends Controller
 {
-    // PG15 読書計画一覧
-    public function index(IndexReadingPlanRequest $request)
+    /**
+     * PG15 読書計画一覧
+     *
+     * @param  IndexReadingPlanRequest  $request：検索・絞り込み用バリデーション済みリクエスト
+     * @return View：読書計画一覧画面ビュー
+     */
+    public function index(IndexReadingPlanRequest $request): View
     {
         // リクエストから status の値を取得
         $status = $request->input('status');
@@ -28,17 +36,25 @@ class ReadingPlanController extends Controller
         return view('reading-plans.index', compact('readingPlans'))->with('currentStatus', $status);
     }
 
-    // PG16 読書計画作成
-    // PG16 読書計画作成画面表示
-    public function create()
+    /**
+     * PG16 読書計画作成画面表示
+     *
+     * @return View：読書計画作成画面ビュー
+     */
+    public function create(): View
     {
         $books = Book::all();
 
         return view('reading-plans.create', compact('books'));
     }
 
-    // PG16 読書計画作成処理
-    public function store(StoreReadingPlanRequest $request)
+    /**
+     * PG16 読書計画作成処理
+     *
+     * @param  StoreReadingPlanRequest  $request：登録用バリデーション済みリクエスト
+     * @return RedirectResponse：読書計画一覧画面へのリダイレクト
+     */
+    public function store(StoreReadingPlanRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
@@ -48,65 +64,88 @@ class ReadingPlanController extends Controller
         // ログイン中のユーザーIDを動的に設定する
         $data['user_id'] = auth()->id();
 
-        // 読書計画テーブルに登録
-        ReadingPlan::create($data);
+        // トランザクションで安全に登録
+        DB::transaction(function () use ($data) {
+            ReadingPlan::create($data);
+        });
 
         return redirect()->route('reading-plans.index')->with('success', '読書計画を登録しました。');
     }
 
-    // PG17	読書計画編集
-    // PG17	読書計画編集画面表示
-    public function edit(ReadingPlan $reading_plan)
+    /**
+     * PG17 読書計画編集画面表示
+     *
+     * @param  ReadingPlan  $reading_plan：編集対象の読書計画モデル
+     * @return View：読書計画編集画面ビュー
+     */
+    public function edit(ReadingPlan $reading_plan): View
     {
         // 読書計画の所有者がログイン中のユーザーでなければ403エラーを返す
-        if ($reading_plan->user_id !== auth()->id()) {
-            abort(403);
-        }
+        $this->authorize('update', $reading_plan);
 
         // 変数名を Blade 側が求めている $readingPlan に合わせる
         return view('reading-plans.edit', ['readingPlan' => $reading_plan]);
     }
 
-    // PG17	読書計画更新処理
-    public function update(UpdateReadingPlanRequest $request, ReadingPlan $reading_plan)
+    /**
+     * PG17 読書計画更新処理
+     *
+     * @param  UpdateReadingPlanRequest  $request：更新用バリデーション済みリクエスト
+     * @param  ReadingPlan  $reading_plan：更新対象の読書計画モデル
+     * @return RedirectResponse：読書計画一覧画面へのリダイレクト
+     */
+    public function update(UpdateReadingPlanRequest $request, ReadingPlan $reading_plan): RedirectResponse
     {
         // 読書計画の所有者がログイン中のユーザーでなければ403エラーを返す
-        if ($reading_plan->user_id !== auth()->id()) {
-            abort(403);
-        }
+        $this->authorize('update', $reading_plan);
 
-        // バリデーション済みのデータを取得し、読書計画情報を更新
-        $reading_plan->update($request->validated());
+        // トランザクションで安全に更新
+        DB::transaction(function () use ($request, $reading_plan) {
+            // バリデーション済みのデータを取得し、読書計画情報を更新
+            $reading_plan->update($request->validated());
+        });
 
         return redirect()->route('reading-plans.index')->with('success', '読書計画を更新しました。');
     }
 
-    // 読書計画を完了（読了する）にする
-    public function complete(ReadingPlan $reading_plan)
+    /**
+     * 読書計画を完了（読了する）にする
+     *
+     * @param  ReadingPlan  $reading_plan：完了対象の読書計画モデル
+     * @return RedirectResponse：読書計画一覧画面へのリダイレクト
+     */
+    public function complete(ReadingPlan $reading_plan): RedirectResponse
     {
         // 読書計画の所有者がログイン中のユーザーでなければ403エラーを返す
-        if ($reading_plan->user_id !== auth()->id()) {
-            abort(403);
-        }
+        $this->authorize('update', $reading_plan);
 
-        // ステータスを完了にし、読了年月日に今日の日付を設定
-        $reading_plan->update([
-            'status' => 'completed',
-            'completed_at' => now(),
-        ]);
+        // トランザクションで安全にステータス変更
+        DB::transaction(function () use ($reading_plan) {
+            // ステータスを完了にし、読了年月日に今日の日付を設定
+            $reading_plan->update([
+                'status' => ReadingPlanStatus::Completed->value,
+                'completed_at' => now(),
+            ]);
+        });
 
         return redirect()->route('reading-plans.index')->with('success', '読書計画を完了しました。');
     }
 
-    // 読書計画を削除する
-    public function destroy(ReadingPlan $reading_plan)
+    /**
+     * 読書計画を削除する
+     *
+     * @param  ReadingPlan  $reading_plan：削除対象の読書計画モデル
+     * @return RedirectResponse：読書計画一覧画面へのリダイレクト
+     */
+    public function destroy(ReadingPlan $reading_plan): RedirectResponse
     {
         // 読書計画の所有者がログイン中のユーザーでなければ403エラーを返す
-        if ($reading_plan->user_id !== auth()->id()) {
-            abort(403);
-        }
+        $this->authorize('delete', $reading_plan);
 
-        $reading_plan->delete();  // 読書計画を削除
+        // トランザクションで安全に削除
+        DB::transaction(function () use ($reading_plan) {
+            $reading_plan->delete();
+        });
 
         return redirect()->route('reading-plans.index')->with('success', '読書計画を削除しました。');
     }
