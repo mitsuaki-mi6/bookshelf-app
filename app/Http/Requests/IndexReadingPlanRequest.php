@@ -8,6 +8,8 @@ class IndexReadingPlanRequest extends FormRequest
 {
     /**
      * ユーザーがこのリクエストを行う権限があるかどうかを判定する
+     *
+     * @return bool：権限の有無
      */
     public function authorize(): bool
     {
@@ -16,6 +18,8 @@ class IndexReadingPlanRequest extends FormRequest
 
     /**
      * リクエストに適用されるバリデーションルールを取得する
+     *
+     * @return array<string, mixed>：バリデーションルール
      */
     public function rules(): array
     {

@@ -16,6 +16,8 @@ class Genre extends Model
 
     /**
      * リレーション: ジャンルに属する書籍（多対多）
+     *
+     * @return BelongsToMany：書籍モデルのコレクションへのリレーション
      */
     public function books(): BelongsToMany
     {

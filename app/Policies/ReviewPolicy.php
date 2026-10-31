@@ -9,6 +9,10 @@ class ReviewPolicy
 {
     /**
      * ユーザーがモデルを更新できるかどうかを判定する
+     *
+     * @param  User  $user：ユーザーモデル
+     * @param  Review  $review：レビューモデル
+     * @return bool：権限の有無
      */
     public function update(User $user, Review $review): bool
     {
@@ -17,6 +21,10 @@ class ReviewPolicy
 
     /**
      * ユーザーがモデルを削除できるかどうかを判定する
+     *
+     * @param  User  $user：ユーザーモデル
+     * @param  Review  $review：レビューモデル
+     * @return bool：権限の有無
      */
     public function delete(User $user, Review $review): bool
     {

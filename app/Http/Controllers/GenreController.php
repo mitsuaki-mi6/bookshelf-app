@@ -12,6 +12,8 @@ class GenreController extends Controller
 {
     /**
      * PG05 ジャンル一覧
+     *
+     * @return View：ジャンル一覧画面ビュー
      */
     public function index(): View
     {
@@ -22,6 +24,9 @@ class GenreController extends Controller
 
     /**
      * PG06 ジャンル詳細
+     *
+     * @param  int  $id：ジャンルID
+     * @return View：ジャンル詳細画面ビュー
      */
     public function show(int $id): View
     {
@@ -33,6 +38,8 @@ class GenreController extends Controller
 
     /**
      * ジャンル登録画面表示
+     *
+     * @return View：ジャンル登録画面ビュー
      */
     public function create(): View
     {
@@ -41,6 +48,9 @@ class GenreController extends Controller
 
     /**
      * PG07 ジャンル登録
+     *
+     * @param  GenreRequest  $request：ジャンル登録用バリデーション済みリクエスト
+     * @return RedirectResponse：ジャンル一覧画面へのリダイレクト
      */
     public function store(GenreRequest $request): RedirectResponse
     {
@@ -52,6 +62,9 @@ class GenreController extends Controller
 
     /**
      * PG07 ジャンル編集
+     *
+     * @param  int  $id：ジャンルID
+     * @return View：ジャンル編集画面ビュー
      */
     public function edit(int $id): View
     {
@@ -62,6 +75,10 @@ class GenreController extends Controller
 
     /**
      * ジャンル情報更新
+     *
+     * @param  UpdateGenreRequest  $request：ジャンル更新用バリデーション済みリクエスト
+     * @param  int  $id：ジャンルID
+     * @return RedirectResponse：ジャンル一覧画面へのリダイレクト
      */
     public function update(UpdateGenreRequest $request, int $id): RedirectResponse
     {
@@ -74,6 +91,9 @@ class GenreController extends Controller
 
     /**
      * ジャンル削除処理
+     *
+     * @param  Genre  $genre：削除対象のジャンルモデル
+     * @return RedirectResponse：ジャンル一覧画面へのリダイレクト
      */
     public function destroy(Genre $genre): RedirectResponse
     {

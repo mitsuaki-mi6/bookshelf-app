@@ -30,6 +30,8 @@ class Book extends Model
 
     /**
      * リレーション: 書籍を登録したユーザー
+     *
+     * @return BelongsTo：ユーザーモデルへのリレーション
      */
     public function user(): BelongsTo
     {
@@ -38,6 +40,8 @@ class Book extends Model
 
     /**
      * リレーション: 書籍に対するレビュー
+     *
+     * @return HasMany：レビューモデルのコレクションへのリレーション
      */
     public function reviews(): HasMany
     {
@@ -46,6 +50,8 @@ class Book extends Model
 
     /**
      * リレーション: 書籍のお気に入り登録
+     *
+     * @return HasMany：お気に入りモデルのコレクションへのリレーション
      */
     public function favorites(): HasMany
     {
@@ -54,6 +60,8 @@ class Book extends Model
 
     /**
      * リレーション: 書籍のジャンル（多対多）
+     *
+     * @return BelongsToMany：ジャンルモデルのコレクションへのリレーション
      */
     public function genres(): BelongsToMany
     {
@@ -63,6 +71,8 @@ class Book extends Model
 
     /**
      * リレーション: 書籍の読書計画
+     *
+     * @return HasMany：読書計画モデルのコレクションへのリレーション
      */
     public function readingPlans(): HasMany
     {

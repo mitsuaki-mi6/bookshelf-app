@@ -97,7 +97,7 @@ class BookStoreApiTest extends TestCase
         $genre = Genre::factory()->create();
 
         // 256文字以上の有効なURLを作成
-        $longUrl = 'https://example.com/' . str_repeat('a', 240);
+        $longUrl = 'https://example.com/'.str_repeat('a', 240);
 
         // Act
         $response = $this->actingAs($user, 'sanctum')->post('/api/v1/books', [
@@ -128,7 +128,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNが13桁未満数字を拒否する()
+    public function バリデーション：_isb_nが13桁未満数字を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -160,7 +160,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNが数字以外を拒否する()
+    public function バリデーション：_isb_nが数字以外を拒否する()
     {
         // Arrange
         // ユーザーを作成
@@ -192,7 +192,7 @@ class BookStoreApiTest extends TestCase
     }
 
     /** @test */
-    public function バリデーション：ISBNの重複を拒否する()
+    public function バリデーション：_isb_nの重複を拒否する()
     {
         // Arrange
         // ユーザーを作成

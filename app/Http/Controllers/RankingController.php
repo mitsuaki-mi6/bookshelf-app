@@ -9,6 +9,8 @@ class RankingController extends Controller
 {
     /**
      * レビュー平均が高い順に上位10件の書籍を取得
+     *
+     * @return View：ランキング一覧画面ビュー
      */
     public function index(): View
     {

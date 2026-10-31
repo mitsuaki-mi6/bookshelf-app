@@ -18,6 +18,9 @@ class BookController extends Controller
 {
     /**
      * Google Books API を使った ISBN 検索処理
+     *
+     * @param  string  $isbn：13桁のISBNコード
+     * @return JsonResponse：検索結果またはエラーのJSONレスポンス
      */
     public function searchIsbn(string $isbn): JsonResponse
     {
@@ -74,6 +77,9 @@ class BookController extends Controller
 
     /**
      * PG01 書籍一覧（トップ）
+     *
+     * @param  IndexBookRequest  $request：検索・ソート用バリデーション済みリクエスト
+     * @return View：書籍一覧画面ビュー
      */
     public function index(IndexBookRequest $request): View
     {
@@ -131,6 +137,9 @@ class BookController extends Controller
     /**
      * PG02 書籍詳細
      * 書籍詳細画面を表示する
+     *
+     * @param  Book  $book：表示対象の書籍モデル
+     * @return View：書籍詳細画面ビュー
      */
     public function show(Book $book): View
     {
@@ -143,6 +152,9 @@ class BookController extends Controller
 
     /**
      * 書籍を削除する
+     *
+     * @param  Book  $book：削除対象の書籍モデル
+     * @return RedirectResponse：書籍一覧画面へのリダイレクト
      */
     public function destroy(Book $book): RedirectResponse
     {
@@ -174,6 +186,8 @@ class BookController extends Controller
     /**
      * PG03 書籍登録
      * 書籍登録画面を表示する
+     *
+     * @return View：書籍登録画面ビュー
      */
     public function create(): View
     {
@@ -184,6 +198,9 @@ class BookController extends Controller
 
     /**
      * 書籍を登録する
+     *
+     * @param  StoreBookRequest  $request：登録用バリデーション済みリクエスト
+     * @return RedirectResponse：書籍一覧画面へのリダイレクト
      */
     public function store(StoreBookRequest $request): RedirectResponse
     {
@@ -210,6 +227,9 @@ class BookController extends Controller
     /**
      * PG04 書籍編集
      * 書籍編集画面を表示する
+     *
+     * @param  Book  $book：編集対象の書籍モデル
+     * @return View：書籍編集画面ビュー
      */
     public function edit(Book $book): View
     {
@@ -226,6 +246,10 @@ class BookController extends Controller
 
     /**
      * 書籍を更新する
+     *
+     * @param  UpdateBookRequest  $request：更新用バリデーション済みリクエスト
+     * @param  Book  $book：更新対象の書籍モデル
+     * @return RedirectResponse：書籍一覧画面へのリダイレクト
      */
     public function update(UpdateBookRequest $request, Book $book): RedirectResponse
     {

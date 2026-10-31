@@ -17,6 +17,8 @@ class Favorite extends Model
 
     /**
      * リレーション: お気に入り登録したユーザー
+     *
+     * @return BelongsTo：ユーザーモデルへのリレーション
      */
     public function user(): BelongsTo
     {
@@ -25,6 +27,8 @@ class Favorite extends Model
 
     /**
      * リレーション: お気に入り登録された書籍
+     *
+     * @return BelongsTo：書籍モデルへのリレーション
      */
     public function book(): BelongsTo
     {

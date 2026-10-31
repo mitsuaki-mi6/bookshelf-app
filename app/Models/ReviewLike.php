@@ -17,6 +17,8 @@ class ReviewLike extends Model
 
     /**
      * リレーション: いいねしたユーザー
+     *
+     * @return BelongsTo：ユーザーモデルへのリレーション
      */
     public function user(): BelongsTo
     {
@@ -25,6 +27,8 @@ class ReviewLike extends Model
 
     /**
      * リレーション: いいねされたレビュー
+     *
+     * @return BelongsTo：レビューモデルへのリレーション
      */
     public function review(): BelongsTo
     {

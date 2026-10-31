@@ -11,6 +11,8 @@ class ReadingReportController extends Controller
 {
     /**
      * 読書レポートと統計情報の表示
+     *
+     * @return View：読書レポート画面ビュー
      */
     public function index(): View
     {

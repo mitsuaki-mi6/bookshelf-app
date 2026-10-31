@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReviewRequest;
-use App\Http\Requests\StoreReviewRequest;  // 投稿用
-use App\Models\Book;        // 更新用
+use App\Http\Requests\StoreReviewRequest;
+use App\Models\Book;
 use App\Models\Review;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +15,10 @@ class ReviewController extends Controller
 {
     /**
      * レビューを登録する
+     *
+     * @param  StoreReviewRequest  $request：レビュー登録用バリデーション済みリクエスト
+     * @param  Book  $book：レビュー対象の書籍モデル
+     * @return RedirectResponse：書籍詳細画面へのリダイレクト
      */
     public function store(StoreReviewRequest $request, Book $book): RedirectResponse
     {
@@ -31,6 +35,10 @@ class ReviewController extends Controller
 
     /**
      * レビュー編集画面を表示する
+     *
+     * @param  Book  $book：対象の書籍モデル
+     * @param  Review  $review：編集対象のレビューモデル
+     * @return View：レビュー編集画面ビュー
      */
     public function edit(Book $book, Review $review): View
     {
@@ -44,6 +52,11 @@ class ReviewController extends Controller
 
     /**
      * レビューを更新する
+     *
+     * @param  ReviewRequest  $request：レビュー更新用バリデーション済みリクエスト
+     * @param  Book  $book：対象の書籍モデル
+     * @param  Review  $review：更新対象のレビューモデル
+     * @return RedirectResponse：書籍詳細画面へのリダイレクト
      */
     public function update(ReviewRequest $request, Book $book, Review $review): RedirectResponse
     {
@@ -62,6 +75,9 @@ class ReviewController extends Controller
 
     /**
      * レビューを削除する
+     *
+     * @param  Review  $review：削除対象のレビューモデル
+     * @return RedirectResponse：書籍詳細画面へのリダイレクト
      */
     public function destroy(Review $review): RedirectResponse
     {
@@ -85,6 +101,10 @@ class ReviewController extends Controller
 
     /**
      * レビューのいいねを切り替える（トグル）
+     *
+     * @param  Request  $request：HTTPリクエスト
+     * @param  Review  $review：いいね対象のレビューモデル
+     * @return RedirectResponse：直前のページへのリダイレクト
      */
     public function like(Request $request, Review $review): RedirectResponse
     {

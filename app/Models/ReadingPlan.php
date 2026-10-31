@@ -27,6 +27,8 @@ class ReadingPlan extends Model
 
     /**
      * リレーション: 読書計画を登録したユーザー
+     *
+     * @return BelongsTo：ユーザーモデルへのリレーション
      */
     public function user(): BelongsTo
     {
@@ -35,6 +37,8 @@ class ReadingPlan extends Model
 
     /**
      * リレーション: 読書計画に登録された書籍
+     *
+     * @return BelongsTo：書籍モデルへのリレーション
      */
     public function book(): BelongsTo
     {

@@ -20,7 +20,9 @@ class Review extends Model
     ];
 
     /**
-     *  リレーション: レビューを投稿したユーザー
+     * リレーション: レビューを投稿したユーザー
+     *
+     * @return BelongsTo：ユーザーモデルへのリレーション
      */
     public function user(): BelongsTo
     {
@@ -29,6 +31,8 @@ class Review extends Model
 
     /**
      * リレーション: レビュー対象の書籍
+     *
+     * @return BelongsTo：書籍モデルへのリレーション
      */
     public function book(): BelongsTo
     {
@@ -37,6 +41,8 @@ class Review extends Model
 
     /**
      * リレーション: レビューに対するいいね
+     *
+     * @return HasMany：いいねモデルのコレクションへのリレーション
      */
     public function reviewLikes(): HasMany
     {
@@ -45,6 +51,8 @@ class Review extends Model
 
     /**
      * リレーション: このレビューに「いいね」したユーザー一覧
+     *
+     * @return BelongsToMany：ユーザーモデルのコレクションへのリレーション
      */
     public function likedByUsers(): BelongsToMany
     {

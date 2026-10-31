@@ -9,6 +9,10 @@ class BookPolicy
 {
     /**
      * ユーザーがモデルを更新できるかどうかを判定する
+     *
+     * @param  User  $user：ユーザーモデル
+     * @param  Book  $book：書籍モデル
+     * @return bool：権限の有無
      */
     public function update(User $user, Book $book): bool
     {
@@ -17,6 +21,10 @@ class BookPolicy
 
     /**
      * ユーザーがモデルを削除できるかどうかを判定する
+     *
+     * @param  User  $user：ユーザーモデル
+     * @param  Book  $book：書籍モデル
+     * @return bool：権限の有無
      */
     public function delete(User $user, Book $book): bool
     {

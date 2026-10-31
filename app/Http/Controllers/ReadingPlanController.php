@@ -16,6 +16,9 @@ class ReadingPlanController extends Controller
 {
     /**
      * PG15 読書計画一覧
+     *
+     * @param  IndexReadingPlanRequest  $request：検索・絞り込み用バリデーション済みリクエスト
+     * @return View：読書計画一覧画面ビュー
      */
     public function index(IndexReadingPlanRequest $request): View
     {
@@ -35,6 +38,8 @@ class ReadingPlanController extends Controller
 
     /**
      * PG16 読書計画作成画面表示
+     *
+     * @return View：読書計画作成画面ビュー
      */
     public function create(): View
     {
@@ -45,6 +50,9 @@ class ReadingPlanController extends Controller
 
     /**
      * PG16 読書計画作成処理
+     *
+     * @param  StoreReadingPlanRequest  $request：登録用バリデーション済みリクエスト
+     * @return RedirectResponse：読書計画一覧画面へのリダイレクト
      */
     public function store(StoreReadingPlanRequest $request): RedirectResponse
     {
@@ -66,6 +74,9 @@ class ReadingPlanController extends Controller
 
     /**
      * PG17 読書計画編集画面表示
+     *
+     * @param  ReadingPlan  $reading_plan：編集対象の読書計画モデル
+     * @return View：読書計画編集画面ビュー
      */
     public function edit(ReadingPlan $reading_plan): View
     {
@@ -78,6 +89,10 @@ class ReadingPlanController extends Controller
 
     /**
      * PG17 読書計画更新処理
+     *
+     * @param  UpdateReadingPlanRequest  $request：更新用バリデーション済みリクエスト
+     * @param  ReadingPlan  $reading_plan：更新対象の読書計画モデル
+     * @return RedirectResponse：読書計画一覧画面へのリダイレクト
      */
     public function update(UpdateReadingPlanRequest $request, ReadingPlan $reading_plan): RedirectResponse
     {
@@ -95,6 +110,9 @@ class ReadingPlanController extends Controller
 
     /**
      * 読書計画を完了（読了する）にする
+     *
+     * @param  ReadingPlan  $reading_plan：完了対象の読書計画モデル
+     * @return RedirectResponse：読書計画一覧画面へのリダイレクト
      */
     public function complete(ReadingPlan $reading_plan): RedirectResponse
     {
@@ -105,7 +123,7 @@ class ReadingPlanController extends Controller
         DB::transaction(function () use ($reading_plan) {
             // ステータスを完了にし、読了年月日に今日の日付を設定
             $reading_plan->update([
-                'status' => 'completed',
+                'status' => ReadingPlanStatus::Completed->value,
                 'completed_at' => now(),
             ]);
         });
@@ -115,6 +133,9 @@ class ReadingPlanController extends Controller
 
     /**
      * 読書計画を削除する
+     *
+     * @param  ReadingPlan  $reading_plan：削除対象の読書計画モデル
+     * @return RedirectResponse：読書計画一覧画面へのリダイレクト
      */
     public function destroy(ReadingPlan $reading_plan): RedirectResponse
     {
